@@ -2,8 +2,10 @@
   description = "A simple NixOS flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -12,7 +14,7 @@
   };
 
   outputs =
-    { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, ... }@inputs:
+    { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, determinate, ... }@inputs:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -63,6 +65,7 @@
           inherit system pkgs;
 
           modules = [
+            determinate.nixosModules.default
             ./hosts/desktop/configuration.nix
             ./common/packages.nix
 

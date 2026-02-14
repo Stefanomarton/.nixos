@@ -10,14 +10,12 @@ in {
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    package = unstable.hyprland;
-    portalPackage = unstable.xdg-desktop-portal-hyprland;
+    package = pkgs.hyprland;
+    portalPackage = pkgs.xdg-desktop-portal-hyprland;
   };
 
   programs.zsh.enable = true;
   programs.firefox = { enable = true; };
-
-  programs.coolercontrol.enable = true;
 
   programs.chromium.enable = true;
 
@@ -30,13 +28,11 @@ in {
   # services.rtkit.enable = true;
 
   environment.systemPackages = (with pkgs; [
-    # Games
-    lunar-client
 
     #Editors
     neovim
     neovide
-    codex
+    claude-code
     # auctex
     # emacsPackages.auctex
     emacs30-pgtk
@@ -60,7 +56,7 @@ in {
 
     # Programs
     gparted
-    supersonic-wayland
+
     spotify
     buku
     kdePackages.kdenlive
@@ -91,7 +87,6 @@ in {
     freerdp
 
     # Chemistry
-    avogadro2
     pdfpc
 
     # Audio
@@ -108,8 +103,6 @@ in {
     sioyek
     zotero
     obsidian
-    ticktick
-    todoist-electron
     anydesk
     anki
 
@@ -119,9 +112,7 @@ in {
     marvin
 
     jre_minimal
-    #rustdesk
     inkscape
-    #kicad
     ipe
     solaar
 
@@ -145,6 +136,7 @@ in {
     dragon-drop
     wireguard-tools
     libnotify
+    quickshell
 
     #3DPrinting
     prusa-slicer
@@ -155,7 +147,6 @@ in {
     zip
     unrar
     atool
-    nextcloud-client
 
     # Appearance
     nemo
@@ -201,10 +192,8 @@ in {
   ])
 
     ++ (with unstable; [
-      clickup
-      code-cursor
+      darktable
       yazi
-      bitwarden-desktop
       btop-rocm
       libreoffice-fresh
       altus
@@ -212,5 +201,7 @@ in {
       typst
       typstyle
       tinymist
+      supersonic-wayland
+      nextcloud-client
     ]);
 }
