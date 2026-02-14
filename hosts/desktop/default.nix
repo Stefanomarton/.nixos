@@ -1,10 +1,7 @@
 { config, pkgs, unstable, lib, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./network.nix
-  ];
+  imports = [ ./hardware-configuration.nix ./network.nix ];
 
   system.rebuild.enableNg = true;
 
@@ -27,28 +24,15 @@
     };
   };
 
-  # Desktop-specific: FZF keybindings
-  programs.fzf.keybindings = true;
-
   # Desktop-specific: ZSH config location
   environment.etc."zshenv".text = ''
     export ZDOTDIR="$HOME"/.config/zsh
     export HISTFILE="$XDG_STATE_HOME"/zsh/history
   '';
 
-  # Desktop-specific: Advanced libvirt with virtiofsd
-  virtualisation.libvirtd = {
-    package = unstable.libvirt;
-    qemu.vhostUserPackages = [ pkgs.virtiofsd ];
-  };
-
-  # Desktop-specific: virt-manager unstable
-  programs.virt-manager.package = unstable.virt-manager;
-
   # Desktop-specific: Looking Glass for VM passthrough
-  systemd.tmpfiles.rules = [
-    "f /dev/shm/looking-glass 0660 sm qemu-libvirtd -"
-  ];
+  systemd.tmpfiles.rules =
+    [ "f /dev/shm/looking-glass 0660 sm qemu-libvirtd -" ];
 
   # Desktop-specific: AMD GPU
   hardware.graphics = {
@@ -79,7 +63,7 @@
   fonts.packages = with pkgs;
     [ julia-mono lexend alegreya-sans alegreya libertinus ibm-plex ]
     ++ builtins.filter lib.attrsets.isDerivation
-      (builtins.attrValues pkgs.nerd-fonts);
+    (builtins.attrValues pkgs.nerd-fonts);
 
   system.stateVersion = "24.05";
 }
