@@ -1,67 +1,48 @@
-{ config, pkgs, unstable, inputs, ... }:
+{ pkgs, unstable, ... }:
+
 let
   mytexlive = pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-full beamertheme-arguelles;
   };
 in {
-
-  services.flatpak.enable = true;
-
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    package = pkgs.hyprland;
-    portalPackage = pkgs.xdg-desktop-portal-hyprland;
+  programs = {
+    zsh.enable = true;
+    firefox.enable = true;
+    chromium.enable = true;
+    direnv = {
+      enable = true;
+      silent = true;
+      nix-direnv.enable = true;
+    };
   };
 
-  programs.zsh.enable = true;
-  programs.firefox = { enable = true; };
-
-  programs.chromium.enable = true;
-
-  programs.direnv = {
-    enable = true;
-    silent = true;
-    nix-direnv.enable = true;
-  };
-
-  # services.rtkit.enable = true;
-
-  environment.systemPackages = (with pkgs; [
-
-    #Editors
+  environment.systemPackages = with pkgs; [
+    # Editors
     neovim
     neovide
     claude-code
-    # auctex
-    # emacsPackages.auctex
     emacs30-pgtk
     emacsPackages.jinx
     emacs-lsp-booster
+
+    # Spell checking
     enchant
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science it ]))
     hunspell
     hunspellDicts.en_US
     hunspellDicts.it_IT
+
+    # Documents
     plantuml
     mermaid-cli
     mytexlive
 
-    # Terminal and Shell
+    # Terminal
     kitty
     zoxide
     fzf
     nushell
     carapace
-
-    # Programs
-    gparted
-
-    spotify
-    buku
-    kdePackages.kdenlive
-    freecad
-    wtype
 
     # Git
     git
@@ -86,9 +67,6 @@ in {
     kdiskmark
     freerdp
 
-    # Chemistry
-    pdfpc
-
     # Audio
     easyeffects
     pavucontrol
@@ -104,22 +82,27 @@ in {
     zotero
     obsidian
     anydesk
-    anki
+    pdfpc
 
-    #chemistry
+    # Chemistry
     avogadro2
     fityk
     marvin
 
+    # Creative
     jre_minimal
     inkscape
     ipe
     solaar
+    kdePackages.kdenlive
+    freecad
+    prusa-slicer
+    orca-slicer
 
-    # social
+    # Social
     ferdium
 
-    # DE
+    # Desktop environment
     vscode
     wallust
     imv
@@ -137,21 +120,18 @@ in {
     wireguard-tools
     libnotify
     quickshell
-
-    #3DPrinting
-    prusa-slicer
-    orca-slicer
+    wtype
+    gparted
+    spotify
+    buku
+    nemo
 
     # Files
     unzip
     zip
     unrar
-    atool
 
-    # Appearance
-    nemo
-
-    # Programming and compilers
+    # Programming
     gnumake
     tree-sitter
     cmake
@@ -167,6 +147,8 @@ in {
     taplo
     nodejs_24
     shfmt
+
+    # Embedded/QMK
     qmk
     pkgsCross.avr.buildPackages.gcc
     avrdude
@@ -174,34 +156,24 @@ in {
     picotool
 
     # VM
-    OVMFFull
-    swtpm
-    virt-viewer
     virglrenderer
-    looking-glass-client
     remmina
     moonlight-qt
     rpi-imager
 
-    # GPU
-    nvtopPackages.amd
-
-    #LSP
+    # LSP
     nixd
-
-  ])
-
-    ++ (with unstable; [
-      darktable
-      yazi
-      btop-rocm
-      libreoffice-fresh
-      altus
-      chromium
-      typst
-      typstyle
-      tinymist
-      supersonic-wayland
-      nextcloud-client
-    ]);
+  ] ++ (with unstable; [
+    darktable
+    yazi
+    btop-rocm
+    libreoffice-fresh
+    altus
+    chromium
+    typst
+    typstyle
+    tinymist
+    supersonic-wayland
+    nextcloud-client
+  ]);
 }
