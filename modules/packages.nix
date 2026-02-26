@@ -1,4 +1,4 @@
-{ pkgs, unstable, ... }:
+{ pkgs, unstable, kimi, claude-code, ... }:
 
 let
   mytexlive = pkgs.texlive.combine {
@@ -19,22 +19,21 @@ in {
       nix-direnv.enable = true;
     };
 
-    fzf = {
-      enable = true;
-      keybindings = true;
-    };
+    fzf.keybindings = true;
 
   };
+
+  xdg.mime.defaultApplications = { "application/pdf" = "sioyek.desktop"; };
 
   environment.systemPackages = with pkgs;
     [
       # Editors
       neovim
       neovide
-      claude-code
       emacs30-pgtk
       emacsPackages.jinx
       emacs-lsp-booster
+      antigravity
 
       # Spell checking
       enchant
@@ -88,7 +87,6 @@ in {
 
       # Productivity
       anki
-      zathura
       sioyek
       zotero
       obsidian
@@ -115,10 +113,11 @@ in {
 
       # Desktop environment
       vscode
-      wallust
+      kimi.packages.${pkgs.system}.kimi-cli
+      claude-code.packages.${pkgs.system}.claude-code
+            wallust
       imv
       tofi
-      eww
       cliphist
       pyprland
       wl-clipboard
@@ -176,6 +175,8 @@ in {
       nixd
     ] ++ (with unstable; [
       darktable
+      gemini-cli
+      claude-code
       yazi
       btop-rocm
       libreoffice-fresh

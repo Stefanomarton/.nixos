@@ -43,6 +43,7 @@
 
   # Desktop-specific: Ollama with ROCm
   services.ollama = {
+    package = unstable.ollama;
     enable = true;
     loadModels = [ "deepseek-r1:14b" ];
     acceleration = "rocm";
