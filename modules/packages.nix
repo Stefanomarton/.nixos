@@ -115,7 +115,7 @@ in {
       vscode
       kimi.packages.${pkgs.system}.kimi-cli
       claude-code.packages.${pkgs.system}.claude-code
-            wallust
+      wallust
       imv
       tofi
       cliphist
@@ -140,8 +140,16 @@ in {
       unzip
       zip
       unrar
+      (whisper-cpp.override { vulkanSupport = true; })
 
       # Programming
+      # # rust
+      cargo
+      rustc
+      rustfmt
+      clippy
+      rust-analyzer
+
       gnumake
       tree-sitter
       cmake
