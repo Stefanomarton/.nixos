@@ -2,8 +2,10 @@
 
 {
   virtualisation.libvirtd = {
-    package = unstable.libvirt;
     enable = true;
+    package = unstable.libvirt;
+    # Use modular daemon mode (default in NixOS 25.11+)
+    # This replaces the legacy monolithic libvirtd daemon
     qemu = {
       package = unstable.qemu;
       runAsRoot = true;
@@ -12,6 +14,9 @@
     };
   };
 
+  # Disable legacy libvirtd socket to prevent conflicts with modular daemons
+  systemd.sockets.libvirtd.enable = false;
+
   virtualisation.spiceUSBRedirection.enable = true;
 
   programs.virt-manager = {
@@ -19,5 +24,6 @@
     package = unstable.virt-manager;
   };
 
-  environment.systemPackages = with pkgs; [ OVMFFull swtpm virt-viewer ];
+  # Kept virt-viewer, removed OVMFFull and swtpm as they are handled by the module
+  environment.systemPackages = with pkgs; [ virt-viewer ];
 }

@@ -1,10 +1,12 @@
-{ pkgs, unstable, kimi, claude-code, ... }:
+{ pkgs, unstable, kimi, claude-code, emacs-overlay, ... }:
 
 let
   mytexlive = pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-full beamertheme-arguelles;
   };
 in {
+  nixpkgs.overlays = [ emacs-overlay.overlays.default ];
+
   programs = {
 
     zsh.enable = true;
@@ -21,6 +23,19 @@ in {
 
     fzf.keybindings = true;
 
+    obs-studio = {
+      enable = true;
+      enableVirtualCamera = true;
+      plugins = with pkgs.obs-studio-plugins; [ obs-backgroundremoval ];
+    };
+
+  };
+
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs-git-pgtk;
+    defaultEditor = true;
+    startWithGraphical = true;
   };
 
   xdg.mime.defaultApplications = { "application/pdf" = "sioyek.desktop"; };
@@ -30,7 +45,8 @@ in {
       # Editors
       neovim
       neovide
-      emacs30-pgtk
+      pkgs.emacs-git-pgtk
+      # emacs30-pgtk
       emacsPackages.jinx
       emacs-lsp-booster
       antigravity
@@ -65,6 +81,7 @@ in {
       exfatprogs
       socat
       libqalculate
+      zathura
       ripgrep
       ripgrep-all
       jq
@@ -76,9 +93,9 @@ in {
       moor
       kdiskmark
       freerdp
+      obs-cli
 
       # Audio
-      easyeffects
       pavucontrol
       pamixer
       playerctl
@@ -183,7 +200,7 @@ in {
       nixd
     ] ++ (with unstable; [
       darktable
-      gemini-cli
+      gemini-cli-bin
       claude-code
       yazi
       btop-rocm

@@ -19,7 +19,7 @@ in nixpkgs.lib.nixosSystem {
   modules = [
     # Core system modules
     ../modules/core
-    ../modules/desktop
+    ../modules/graphical
     ../modules/packages.nix
     ../modules/virtualization.nix
 
