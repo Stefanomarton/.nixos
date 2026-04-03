@@ -11,15 +11,24 @@
     stylix.url = "github:danth/stylix/release-25.11";
     kimi.url = "github:MoonshotAI/kimi-cli";
     claude-code.url = "github:sadjow/claude-code-nix";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    kmonad = {
+      url = "github:kmonad/kmonad?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neovim.url = "github:nix-community/neovim-nightly-overlay";
+
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, kimi
-    , claude-code, ... }@inputs:
+    , claude-code, emacs-overlay, kmonad, neovim, ... }@inputs:
     let
       mkHost = import ./lib/mkHost.nix {
-        inherit nixpkgs nixpkgs-unstable home-manager stylix kimi claude-code;
+        inherit nixpkgs nixpkgs-unstable home-manager stylix kimi claude-code
+          emacs-overlay kmonad neovim;
       };
     in {
+
       nixosConfigurations = {
         laptop = mkHost {
           hostname = "laptop";
@@ -30,7 +39,7 @@
         desktop = mkHost {
           hostname = "desktop";
           username = "sm";
-          modules = [ ./hosts/desktop ];
+          modules = [ ./hosts/desktop kmonad.nixosModules.default ];
         };
       };
     };

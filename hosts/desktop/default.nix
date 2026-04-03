@@ -24,6 +24,11 @@
     };
   };
 
+  # Laptop-specific: udev rules for uinput
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+  '';
+
   # Desktop-specific: ZSH config location
   environment.etc."zshenv".text = ''
     export ZDOTDIR="$HOME"/.config/zsh

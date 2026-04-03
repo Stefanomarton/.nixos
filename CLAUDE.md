@@ -8,7 +8,7 @@ This is a NixOS flake configuration for two hosts: laptop and desktop.
 - **`lib/mkHost.nix`** - Host builder that auto-imports all shared modules and integrates home-manager with stylix
 - **`hosts/<hostname>/`** - Host-specific configs (hardware, users, services)
 - **`modules/core/`** - Core system: boot, nix settings, locale, security
-- **`modules/desktop/`** - Desktop env: hyprland, audio, bluetooth, services
+- **`modules/graphical/`** - Desktop env: hyprland, audio, bluetooth, services
 - **`modules/packages.nix`** - System-wide packages (edit here to add packages)
 - **`modules/virtualization.nix`** - Libvirtd, QEMU, virt-manager
 - **`home/`** - Home-manager config with stylix theming
@@ -36,7 +36,7 @@ This is a NixOS flake configuration for two hosts: laptop and desktop.
 
 ### Module organization
 - Core modules use `modules/core/default.nix` as entry point
-- Desktop modules use `modules/desktop/default.nix` as entry point
+- Desktop modules use `modules/graphical/default.nix` as entry point
 - Both entry points import all submodules in their directory
 
 ## Rebuild Commands
@@ -54,10 +54,10 @@ sudo nixos-rebuild switch --flake .#desktop
 | `modules/core/nix.nix` | Flakes, GC (weekly), cachix |
 | `modules/core/locale.nix` | Europe/Rome, en_US/it_IT |
 | `modules/core/security.nix` | Polkit, rtkit, dbus, GNOME keyring |
-| `modules/desktop/hyprland.nix` | Wayland compositor + XWayland |
-| `modules/desktop/audio.nix` | PipeWire with ALSA/PulseAudio compat |
-| `modules/desktop/bluetooth.nix` | Bluetooth + Blueman |
-| `modules/desktop/services.nix` | Udisks2, gvfs, flatpak |
+| `modules/graphical/hyprland.nix` | Wayland compositor + XWayland |
+| `modules/graphical/audio.nix` | PipeWire with ALSA/PulseAudio compat |
+| `modules/graphical/bluetooth.nix` | Bluetooth + Blueman |
+| `modules/graphical/services.nix` | Udisks2, gvfs, flatpak |
 | `modules/packages.nix` | All system packages (~100+) |
 | `modules/virtualization.nix` | VMs, libvirtd, QEMU, TPM |
 | `home/stylix.nix` | Theme: black-metal-nile, gammastep, dunst |

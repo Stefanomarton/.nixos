@@ -56,10 +56,10 @@ sudo nixos-rebuild switch --flake .#desktop
 | Nix settings | `modules/core/nix.nix` |
 | Locale/timezone | `modules/core/locale.nix` |
 | Security services | `modules/core/security.nix` |
-| Hyprland | `modules/desktop/hyprland.nix` |
-| Audio | `modules/desktop/audio.nix` |
-| Bluetooth | `modules/desktop/bluetooth.nix` |
-| Desktop services | `modules/desktop/services.nix` |
+| Hyprland | `modules/graphical/hyprland.nix` |
+| Audio | `modules/graphical/audio.nix` |
+| Bluetooth | `modules/graphical/bluetooth.nix` |
+| Desktop services | `modules/graphical/services.nix` |
 | Virtualization | `modules/virtualization.nix` |
 | Theme/colors | `home/stylix.nix` |
 
@@ -67,7 +67,7 @@ sudo nixos-rebuild switch --flake .#desktop
 
 The `lib/mkHost.nix` helper automatically includes:
 - All core modules (`modules/core/*`)
-- All desktop modules (`modules/desktop/*`)
+- All desktop modules (`modules/graphical/*`)
 - System packages (`modules/packages.nix`)
 - Virtualization (`modules/virtualization.nix`)
 - Home-manager with stylix integration

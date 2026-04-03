@@ -1,4 +1,4 @@
-{ pkgs, unstable, kimi, claude-code, emacs-overlay, ... }:
+{ pkgs, unstable, kimi, claude-code, emacs-overlay, neovim, ... }:
 
 let
   mytexlive = pkgs.texlive.combine {
@@ -43,13 +43,11 @@ in {
   environment.systemPackages = with pkgs;
     [
       # Editors
-      neovim
-      neovide
       pkgs.emacs-git-pgtk
+      neovim.packages.${pkgs.system}.default
       # emacs30-pgtk
       emacsPackages.jinx
       emacs-lsp-booster
-      antigravity
 
       # Spell checking
       enchant
@@ -62,6 +60,7 @@ in {
       plantuml
       mermaid-cli
       mytexlive
+      pandoc
 
       # Terminal
       kitty
@@ -183,6 +182,8 @@ in {
       nodejs_24
       shfmt
 
+      supabase-cli
+
       # Embedded/QMK
       qmk
       pkgsCross.avr.buildPackages.gcc
@@ -202,6 +203,7 @@ in {
       darktable
       gemini-cli-bin
       claude-code
+      antigravity
       yazi
       btop-rocm
       libreoffice-fresh
@@ -212,5 +214,7 @@ in {
       tinymist
       supersonic-wayland
       nextcloud-client
+      neovim
+      neovide
     ]);
 }
