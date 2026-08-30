@@ -1,13 +1,23 @@
-{ pkgs, unstable, kimi, claude-code, emacs-overlay, neovim, ... }:
+{
+  pkgs,
+  unstable,
+  kimi,
+  claude-code,
+  neovim,
+  pyprland,
+  ...
+}:
 
 let
   mytexlive = pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-full beamertheme-arguelles;
   };
-in {
-  nixpkgs.overlays = [ emacs-overlay.overlays.default ];
+in
+{
 
   programs = {
+
+    niri.enable = true;
 
     zsh.enable = true;
 
@@ -31,27 +41,48 @@ in {
 
   };
 
+  services.hyprwhspr-rs = {
+    enable = true;
+    package = pkgs.hyprwhspr-rs.override {
+      # to optimize build time you can skip enabling cudaSupport for one of these two
+      # for whisper do whisper-cpp, for NVIDIA Parakeet do onnxruntime
+      whisper-cpp = pkgs.whisper-cpp.override { rocmSupport = true; };
+      onnxruntime = pkgs.onnxruntime.override { rocmSupport = true; };
+    };
+  };
+
   services.emacs = {
     enable = true;
-    package = pkgs.emacs-git-pgtk;
+    package = pkgs.emacs30-pgtk;
     defaultEditor = true;
     startWithGraphical = true;
   };
 
-  xdg.mime.defaultApplications = { "application/pdf" = "sioyek.desktop"; };
+  xdg.mime.defaultApplications = {
+    "application/pdf" = "sioyek.desktop";
+  };
 
-  environment.systemPackages = with pkgs;
+  environment.systemPackages =
+    with pkgs;
     [
+      pyprland.packages.${pkgs.system}.pyprland
       # Editors
-      pkgs.emacs-git-pgtk
       neovim.packages.${pkgs.system}.default
-      # emacs30-pgtk
+      emacs30-pgtk
       emacsPackages.jinx
+
       emacs-lsp-booster
 
       # Spell checking
       enchant
-      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science it ]))
+      (aspellWithDicts (
+        dicts: with dicts; [
+          en
+          en-computers
+          en-science
+          it
+        ]
+      ))
       hunspell
       hunspellDicts.en_US
       hunspellDicts.it_IT
@@ -60,10 +91,10 @@ in {
       plantuml
       mermaid-cli
       mytexlive
-      pandoc
 
       # Terminal
       kitty
+
       zoxide
       fzf
       nushell
@@ -74,6 +105,9 @@ in {
       lazygit
       gh
       delta
+
+      scrcpy
+      hyprsunset
 
       # Tools
       stow
@@ -106,13 +140,9 @@ in {
       sioyek
       zotero
       obsidian
-      anydesk
+      logseq
       pdfpc
-
-      # Chemistry
-      avogadro2
-      fityk
-      marvin
+      tmux
 
       # Creative
       jre_minimal
@@ -123,6 +153,7 @@ in {
       freecad
       prusa-slicer
       orca-slicer
+      clickup
 
       # Social
       ferdium
@@ -135,7 +166,6 @@ in {
       imv
       tofi
       cliphist
-      pyprland
       wl-clipboard
       kmonad
       polkit_gnome
@@ -156,15 +186,17 @@ in {
       unzip
       zip
       unrar
-      (whisper-cpp.override { vulkanSupport = true; })
 
       # Programming
       # # rust
       cargo
+      bun
       rustc
       rustfmt
       clippy
       rust-analyzer
+      marksman
+      android-tools
 
       gnumake
       tree-sitter
@@ -173,7 +205,7 @@ in {
       python3
       pyright
       clang
-      nixfmt-classic
+      nixfmt
       cpio
       meson
       hyprwayland-scanner
@@ -183,7 +215,6 @@ in {
       shfmt
 
       supabase-cli
-
       # Embedded/QMK
       qmk
       pkgsCross.avr.buildPackages.gcc
@@ -196,14 +227,18 @@ in {
       remmina
       moonlight-qt
       rpi-imager
+      prismlauncher
 
       # LSP
       nixd
-    ] ++ (with unstable; [
       darktable
-      gemini-cli-bin
-      claude-code
-      antigravity
+    ]
+    ++ (with unstable; [
+      anydesk
+      herdr
+
+      hyprwhspr-rs
+      claude-agent-acp
       yazi
       btop-rocm
       libreoffice-fresh
@@ -212,9 +247,15 @@ in {
       typst
       typstyle
       tinymist
-      supersonic-wayland
       nextcloud-client
       neovim
       neovide
+      go-hass-agent
+      pandoc
+      thunderbird
+      bitwarden-desktop
+      ticktick
+      morgen
+      pyprland
     ]);
 }

@@ -17,19 +17,11 @@
       nushell.enable = true;
       yazi.enable = true;
     };
-  };
-
-  services.gammastep = {
-    enable = true;
-    provider = "manual";
-    latitude = 45.1854;
-    longitude = 9.1553;
-    settings = {
-      general = {
-        brightness-day = 1.0;
-        brightness-night = 0.6;
-        adjustment-method = "wayland";
-      };
+    # Set the Adwaita cursor
+    cursor = {
+      package = pkgs.adwaita-icon-theme;
+      name = "Adwaita";
+      size = 18; # You can adjust the size to your preference (e.g., 16, 24, 32)
     };
   };
 
@@ -38,7 +30,10 @@
     settings = {
       global = {
         monitor = 2;
-        mouse_left_click = [ "do_action" "close_current" ];
+        mouse_left_click = [
+          "do_action"
+          "close_current"
+        ];
       };
     };
   };

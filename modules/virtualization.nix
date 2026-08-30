@@ -8,7 +8,7 @@
     # This replaces the legacy monolithic libvirtd daemon
     qemu = {
       package = unstable.qemu;
-      runAsRoot = true;
+      runAsRoot = false;
       swtpm.enable = true;
       vhostUserPackages = [ pkgs.virtiofsd ];
     };

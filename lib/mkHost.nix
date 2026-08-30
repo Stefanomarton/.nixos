@@ -7,11 +7,13 @@ let
   pkgs = import nixpkgs {
     inherit system;
     config.allowUnfree = true;
+    config.permittedInsecurePackages = [ "electron-39.8.10" ];
   };
 
   unstable = import nixpkgs-unstable {
     inherit system;
     config.allowUnfree = true;
+    config.permittedInsecurePackages = [ "electron-39.8.10" ];
   };
 in nixpkgs.lib.nixosSystem {
   inherit system pkgs;
@@ -41,5 +43,10 @@ in nixpkgs.lib.nixosSystem {
 
   specialArgs = {
     inherit unstable;
-  } // (builtins.removeAttrs inputs ["nixpkgs" "nixpkgs-unstable" "home-manager" "stylix"]);
+  } // (builtins.removeAttrs inputs [
+    "nixpkgs"
+    "nixpkgs-unstable"
+    "home-manager"
+    "stylix"
+  ]);
 }
