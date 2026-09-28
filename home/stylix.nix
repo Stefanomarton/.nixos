@@ -5,6 +5,8 @@
     enable = true;
     autoEnable = true;
     polarity = "dark";
+    # inert under home-manager.useGlobalPkgs, and silences its warning
+    overlays.enable = false;
     image = ./wallpaper.png;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-nile.yaml";
     targets = {
@@ -29,7 +31,7 @@
     enable = true;
     settings = {
       global = {
-        monitor = 2;
+        follow = "mouse";
         mouse_left_click = [
           "do_action"
           "close_current"

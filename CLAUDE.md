@@ -1,70 +1,59 @@
 # Claude Code Context
 
-This is a NixOS flake configuration for two hosts: laptop and desktop.
+NixOS flake for two hosts: laptop and desktop.
 
 ## Architecture
 
-- **`flake.nix`** - Main entry point, defines hosts using `mkHost` helper
-- **`lib/mkHost.nix`** - Host builder that auto-imports all shared modules and integrates home-manager with stylix
-- **`hosts/<hostname>/`** - Host-specific configs (hardware, users, services)
-- **`modules/core/`** - Core system: boot, nix settings, locale, security
-- **`modules/graphical/`** - Desktop env: hyprland, audio, bluetooth, services
-- **`modules/packages.nix`** - System-wide packages (edit here to add packages)
-- **`modules/virtualization.nix`** - Libvirtd, QEMU, virt-manager
-- **`home/`** - Home-manager config with stylix theming
+- **`flake.nix`** — inputs, the `mkHost` helper (inline), and the two hosts
+- **`common/`** — everything both machines share; auto-imported by `mkHost`
+- **`hosts/<hostname>/`** — host-specific only (hardware, network, services)
+- **`home/`** — home-manager config with stylix theming
+
+`mkHost` builds `nixpkgs.lib.nixosSystem` with `modules = [ ./common ./hosts/${hostname} ] ++ extraModules`
+and passes `inputs`, `unstable`, `hostname`, `username` through `specialArgs`.
 
 ## Hosts
 
-| Host | User | Key Features |
-|------|------|--------------|
-| laptop | stefanom | NetworkManager, greetd, Tailscale, TLP |
-| desktop | sm | Bridge+VLANs, AMD GPU/ROCm, Ollama, Looking Glass, Determinate Nix |
+| Host | User | stateVersion | Key features |
+|------|------|--------------|--------------|
+| laptop | stefanom | 24.05 | NetworkManager, Tailscale, TLP, KDE Connect |
+| desktop | sm | 25.11 | bridge+VLANs, AMD GPU/ROCm, Ollama, Sunshine, libvirtd + Looking Glass, openlogi, kmonad module |
 
-## Key Patterns
+## File purposes
 
-### Accessing unstable packages
+| File | Purpose |
+|------|---------|
+| `common/default.nix` | user (`users.users.${username}`), greetd→Hyprland, udev uinput, `/etc/zshenv`, xdg user-dirs, base fonts, home-manager wiring |
+| `common/system.nix` | zen kernel, systemd-boot, nix settings + GC, Europe/Rome + it_IT locales, polkit/rtkit/keyring |
+| `common/desktop.nix` | Hyprland (flake package), PipeWire, Bluetooth, udisks2/gvfs/flatpak |
+| `common/packages.nix` | all system packages (~250), plus netbird/emacs/obs/direnv programs |
+| `hosts/desktop/network.nix` | br0 bridge + vlan10/20/40, static IPs, default route on br0 |
+| `hosts/desktop/virtualization.nix` | libvirtd/QEMU/swtpm, virt-manager, `libvirtd` group, Looking Glass shm |
+| `home/stylix.nix` | theme black-metal-nile, dunst |
+
+## Key patterns
+
 ```nix
-{ unstable, ... }:
-{
-  environment.systemPackages = [ unstable.package-name ];
-}
+# unstable packages
+{ unstable, ... }: { environment.systemPackages = [ unstable.pkg ]; }
+
+# flake inputs (never destructured as top-level args)
+{ pkgs, inputs, ... }:
+let system = pkgs.stdenv.hostPlatform.system;
+in { environment.systemPackages = [ inputs.neovim.packages.${system}.default ]; }
 ```
 
-### Adding a new host
-1. Create `hosts/<name>/default.nix` and `hardware-configuration.nix`
-2. Add entry in `flake.nix` using `mkHost { hostname; username; modules; }`
+- Never hardcode a username in `common/` — use the `username` arg.
+- Use `pkgs.stdenv.hostPlatform.system`, not the deprecated `pkgs.system`.
+- Adding a flake input = one edit (the `inputs` block); `outputs` takes `@inputs`.
+- Unfree allowed; `permittedInsecurePackages` is set once in `flake.nix`.
 
-### Module organization
-- Core modules use `modules/core/default.nix` as entry point
-- Desktop modules use `modules/graphical/default.nix` as entry point
-- Both entry points import all submodules in their directory
-
-## Rebuild Commands
+## Rebuild
 
 ```bash
 sudo nixos-rebuild switch --flake .#laptop
 sudo nixos-rebuild switch --flake .#desktop
 ```
 
-## File Purposes
-
-| File | Purpose |
-|------|---------|
-| `modules/core/boot.nix` | Zen kernel, systemd-boot, EFI |
-| `modules/core/nix.nix` | Flakes, GC (weekly), cachix |
-| `modules/core/locale.nix` | Europe/Rome, en_US/it_IT |
-| `modules/core/security.nix` | Polkit, rtkit, dbus, GNOME keyring |
-| `modules/graphical/hyprland.nix` | Wayland compositor + XWayland |
-| `modules/graphical/audio.nix` | PipeWire with ALSA/PulseAudio compat |
-| `modules/graphical/bluetooth.nix` | Bluetooth + Blueman |
-| `modules/graphical/services.nix` | Udisks2, gvfs, flatpak |
-| `modules/packages.nix` | All system packages (~100+) |
-| `modules/virtualization.nix` | VMs, libvirtd, QEMU, TPM |
-| `home/stylix.nix` | Theme: black-metal-nile, gammastep, dunst |
-
-## Conventions
-
-- Unfree packages allowed (`config.allowUnfree = true`)
-- Home-manager uses global pkgs and user packages
-- Backup extension for home-manager conflicts: `.backup`
-- Unstable channel available via `specialArgs` as `unstable`
+Cheap check without building: `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath`
+(must be warning-free).

@@ -11,10 +11,6 @@
     stylix.url = "github:danth/stylix/release-26.05";
     kimi.url = "github:MoonshotAI/kimi-cli";
     claude-code.url = "github:sadjow/claude-code-nix";
-    kmonad = {
-      url = "github:kmonad/kmonad?dir=nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     hyprland.url = "github:hyprwm/Hyprland";
     pyprland.url = "github:hyprland-community/pyprland";
@@ -25,55 +21,53 @@
   };
 
   outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      home-manager,
-      stylix,
-      kimi,
-      claude-code,
-      kmonad,
-      neovim,
-      hyprland,
-      pyprland,
-      openlogi,
-      ...
-    }@inputs:
+    { nixpkgs, nixpkgs-unstable, ... }@inputs:
     let
-      mkHost = import ./lib/mkHost.nix {
-        inherit
-          nixpkgs
-          nixpkgs-unstable
-          home-manager
-          stylix
-          kimi
-          claude-code
-          kmonad
-          neovim
-          hyprland
-          pyprland
-          openlogi
-          ;
+      system = "x86_64-linux";
+
+      nixpkgsConfig = {
+        allowUnfree = true;
+        permittedInsecurePackages = [ "electron-39.8.10" ];
       };
+      pkgsFrom =
+        source:
+        import source {
+          inherit system;
+          config = nixpkgsConfig;
+        };
+
+      # Every host gets common/ + its own hosts/<hostname>/.
+      mkHost =
+        {
+          hostname,
+          username,
+          extraModules ? [ ],
+        }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          pkgs = pkgsFrom nixpkgs;
+          specialArgs = {
+            inherit inputs hostname username;
+            unstable = pkgsFrom nixpkgs-unstable;
+          };
+          modules = [
+            ./common
+            ./hosts/${hostname}
+          ]
+          ++ extraModules;
+        };
     in
     {
-
       nixosConfigurations = {
         laptop = mkHost {
           hostname = "laptop";
           username = "stefanom";
-          modules = [ ./hosts/laptop ];
         };
 
         desktop = mkHost {
           hostname = "desktop";
           username = "sm";
-          modules = [
-            ./hosts/desktop
-            kmonad.nixosModules.default
-            openlogi.nixosModules.default
-          ];
+          extraModules = [ inputs.openlogi.nixosModules.default ];
         };
       };
     };

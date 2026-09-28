@@ -1,14 +1,12 @@
 {
   pkgs,
   unstable,
-  kimi,
-  claude-code,
-  neovim,
-  pyprland,
+  inputs,
   ...
 }:
 
 let
+  system = pkgs.stdenv.hostPlatform.system;
   mytexlive = pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-full beamertheme-arguelles;
   };
@@ -16,8 +14,6 @@ in
 {
 
   programs = {
-
-    niri.enable = true;
 
     zsh.enable = true;
 
@@ -41,13 +37,21 @@ in
 
   };
 
-  services.hyprwhspr-rs = {
-    enable = true;
-    package = pkgs.hyprwhspr-rs.override {
-      # to optimize build time you can skip enabling cudaSupport for one of these two
-      # for whisper do whisper-cpp, for NVIDIA Parakeet do onnxruntime
-      whisper-cpp = pkgs.whisper-cpp.override { rocmSupport = true; };
-      onnxruntime = pkgs.onnxruntime.override { rocmSupport = true; };
+  services.netbird = {
+    package = unstable.netbird;
+    clients.wt0 = {
+
+      # Port used to listen to wireguard connections
+      port = 51821;
+
+      # Set this to true if you want the GUI client
+      ui.enable = false;
+
+      # This opens ports required for direct connection without a relay
+      openFirewall = true;
+
+      # This opens necessary firewall ports in the Netbird client's network interface
+      openInternalFirewall = true;
     };
   };
 
@@ -65,9 +69,9 @@ in
   environment.systemPackages =
     with pkgs;
     [
-      pyprland.packages.${pkgs.system}.pyprland
+      inputs.pyprland.packages.${system}.pyprland
       # Editors
-      neovim.packages.${pkgs.system}.default
+      inputs.neovim.packages.${system}.default
       emacs30-pgtk
       emacsPackages.jinx
 
@@ -91,6 +95,8 @@ in
       plantuml
       mermaid-cli
       mytexlive
+      ffmpeg
+      qpdf
 
       # Terminal
       kitty
@@ -160,8 +166,8 @@ in
 
       # Desktop environment
       vscode
-      kimi.packages.${pkgs.system}.kimi-cli
-      claude-code.packages.${pkgs.system}.claude-code
+      inputs.kimi.packages.${system}.kimi-cli
+      inputs.claude-code.packages.${system}.claude-code
       wallust
       imv
       tofi
@@ -236,8 +242,6 @@ in
     ++ (with unstable; [
       anydesk
       herdr
-
-      hyprwhspr-rs
       claude-agent-acp
       yazi
       btop-rocm
@@ -248,14 +252,11 @@ in
       typstyle
       tinymist
       nextcloud-client
-      neovim
       neovide
       go-hass-agent
       pandoc
       thunderbird
       bitwarden-desktop
       ticktick
-      morgen
-      pyprland
     ]);
 }

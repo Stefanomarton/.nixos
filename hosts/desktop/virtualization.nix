@@ -1,11 +1,16 @@
-{ pkgs, unstable, ... }:
+{
+  pkgs,
+  unstable,
+  username,
+  ...
+}:
 
 {
+  # Modular daemon mode (default in NixOS 25.11+) replaces the legacy
+  # monolithic libvirtd daemon.
   virtualisation.libvirtd = {
     enable = true;
     package = unstable.libvirt;
-    # Use modular daemon mode (default in NixOS 25.11+)
-    # This replaces the legacy monolithic libvirtd daemon
     qemu = {
       package = unstable.qemu;
       runAsRoot = false;
@@ -24,6 +29,13 @@
     package = unstable.virt-manager;
   };
 
-  # Kept virt-viewer, removed OVMFFull and swtpm as they are handled by the module
-  environment.systemPackages = with pkgs; [ virt-viewer ];
+  users.users.${username}.extraGroups = [ "libvirtd" ];
+
+  # Looking Glass shared memory for GPU passthrough
+  systemd.tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 ${username} qemu-libvirtd -" ];
+
+  environment.systemPackages = with pkgs; [
+    virt-viewer
+    looking-glass-client
+  ];
 }
