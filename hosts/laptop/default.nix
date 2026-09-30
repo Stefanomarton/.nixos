@@ -5,13 +5,6 @@
 
   networking.networkmanager.enable = true;
 
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "both";
-  };
-
-  programs.kdeconnect.enable = true;
-
   services.tlp = {
     enable = true;
     settings = {

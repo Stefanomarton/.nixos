@@ -27,16 +27,20 @@
     };
   };
 
-  services.dunst = {
-    enable = true;
-    settings = {
-      global = {
-        follow = "mouse";
-        mouse_left_click = [
-          "do_action"
-          "close_current"
-        ];
+  services = {
+    dunst = {
+      enable = true;
+      settings = {
+        global = {
+          follow = "mouse";
+          mouse_left_click = [
+            "do_action"
+            "close_current"
+          ];
+        };
       };
     };
+
   };
+
 }

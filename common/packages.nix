@@ -17,9 +17,9 @@ in
 
     zsh.enable = true;
 
-    firefox.enable = true;
-
     chromium.enable = true;
+
+    kdeconnect.enable = true;
 
     direnv = {
       enable = true;
@@ -166,7 +166,6 @@ in
 
       # Desktop environment
       vscode
-      inputs.kimi.packages.${system}.kimi-cli
       inputs.claude-code.packages.${system}.claude-code
       wallust
       imv
@@ -240,12 +239,13 @@ in
       darktable
     ]
     ++ (with unstable; [
+      teams-for-linux
       anydesk
       herdr
       claude-agent-acp
       yazi
       btop-rocm
-      libreoffice-fresh
+      libreoffice
       altus
       chromium
       typst
