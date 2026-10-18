@@ -22,21 +22,4 @@ in
       Persistent = true;
     };
   };
-
-  # Daily backup of the Anagrafica PocketBase data (was a hand-written unit in ~/.config/systemd/user).
-  systemd.user.services.anagrafica-backup = {
-    description = "Backup dati PocketBase Anagrafica";
-    path = [ "/run/current-system/sw" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${home}/.marton-drive/work/projects/anagrafica/scripts/backup-pb.sh";
-    };
-  };
-  systemd.user.timers.anagrafica-backup = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "daily";
-      Persistent = true;
-    };
-  };
 }
