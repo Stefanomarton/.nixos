@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ./network.nix
     ./virtualization.nix
+    ./user-services.nix
   ];
 
   # AMD GPU

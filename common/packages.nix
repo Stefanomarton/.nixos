@@ -57,13 +57,26 @@ in
 
   services.emacs = {
     enable = true;
-    package = pkgs.emacs30-pgtk;
+    package = unstable.emacs31-pgtk;
     defaultEditor = true;
     startWithGraphical = true;
   };
 
   xdg.mime.defaultApplications = {
     "application/pdf" = "sioyek.desktop";
+
+    "text/html" = "chromium-browser.desktop";
+    "application/xhtml+xml" = "chromium-browser.desktop";
+    "application/x-extension-htm" = "chromium-browser.desktop";
+    "application/x-extension-html" = "chromium-browser.desktop";
+    "application/x-extension-shtml" = "chromium-browser.desktop";
+    "application/x-extension-xhtml" = "chromium-browser.desktop";
+    "application/x-extension-xht" = "chromium-browser.desktop";
+    "x-scheme-handler/http" = "chromium-browser.desktop";
+    "x-scheme-handler/https" = "chromium-browser.desktop";
+    "x-scheme-handler/about" = "chromium-browser.desktop";
+    "x-scheme-handler/unknown" = "chromium-browser.desktop";
+    "x-scheme-handler/chrome" = "chromium-browser.desktop";
   };
 
   environment.systemPackages =
@@ -167,6 +180,7 @@ in
       # Desktop environment
       vscode
       inputs.claude-code.packages.${system}.claude-code
+      inputs.cpm.packages.${system}.default
       wallust
       imv
       tofi
@@ -209,6 +223,8 @@ in
       gcc
       python3
       pyright
+      typescript-language-server   # LSP per il plugin typescript-lsp di Claude Code
+      typescript
       clang
       nixfmt
       cpio
@@ -239,6 +255,7 @@ in
       darktable
     ]
     ++ (with unstable; [
+      antigravity
       teams-for-linux
       anydesk
       herdr
@@ -255,6 +272,7 @@ in
       neovide
       go-hass-agent
       pandoc
+      gmailctl
       thunderbird
       bitwarden-desktop
       ticktick

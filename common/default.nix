@@ -47,6 +47,9 @@
     KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
   '';
 
+  # cpm installs claude-<profile> wrappers into ~/.local/bin
+  environment.localBinInPath = true;
+
   environment.etc."zshenv".text = ''
     export ZDOTDIR="$HOME"/.config/zsh
     export HISTFILE="$XDG_STATE_HOME"/zsh/history

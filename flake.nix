@@ -11,6 +11,7 @@
     stylix.url = "github:danth/stylix/release-26.05";
     kimi.url = "github:MoonshotAI/kimi-cli";
     claude-code.url = "github:sadjow/claude-code-nix";
+    cpm.url = "github:JakubKontra/claude-profile-manager";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     hyprland.url = "github:hyprwm/Hyprland";
     pyprland.url = "github:hyprland-community/pyprland";
