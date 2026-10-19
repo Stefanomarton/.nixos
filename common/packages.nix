@@ -85,7 +85,6 @@ in
       inputs.pyprland.packages.${system}.pyprland
       # Editors
       inputs.neovim.packages.${system}.default
-      emacs30-pgtk
       emacsPackages.jinx
 
       emacs-lsp-booster
@@ -223,7 +222,7 @@ in
       gcc
       python3
       pyright
-      typescript-language-server   # LSP per il plugin typescript-lsp di Claude Code
+      typescript-language-server # LSP per il plugin typescript-lsp di Claude Code
       typescript
       clang
       nixfmt

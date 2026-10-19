@@ -803,6 +803,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_9": {
+      "locked": {
+        "lastModified": 1792295010,
+        "narHash": "sha256-F7meJtbqGttmUoMmYjRRgkVs42sn7bh7vvRvLPlUN98=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "8ce73368d1efd4d657e9064d29b144a52046b4e8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": [
@@ -975,7 +991,8 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "openlogi": "openlogi",
         "pyprland": "pyprland",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "tasks": "tasks"
       }
     },
     "rust-overlay": {
@@ -1104,6 +1121,25 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "tasks": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_9"
+      },
+      "locked": {
+        "lastModified": 1792440995,
+        "narHash": "sha256-90yzas43Lo/B23rTurLe95+WPLeqE3y2vOaAMUGAGS4=",
+        "ref": "feat/v0",
+        "rev": "9969634551595e28341d923d1ff21b31c2f4e025",
+        "revCount": 117,
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/tasks"
+      },
+      "original": {
+        "ref": "feat/v0",
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/tasks"
       }
     },
     "tinted-kitty": {

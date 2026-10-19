@@ -15,6 +15,7 @@
     neovim.url = "github:nix-community/neovim-nightly-overlay";
     hyprland.url = "github:hyprwm/Hyprland";
     pyprland.url = "github:hyprland-community/pyprland";
+    tasks.url = "git+https://github.com/Stefanomarton/tasks?ref=feat/v0";
     openlogi = {
       url = "github:AprilNEA/OpenLogi";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -1,4 +1,4 @@
-{ pkgs, unstable, ... }:
+{ pkgs, unstable, inputs, ... }:
 
 {
   imports = [
@@ -50,7 +50,10 @@
 
   programs.openlogi.enable = true;
 
-  environment.systemPackages = [ pkgs.nvtopPackages.amd ];
+  environment.systemPackages = [
+    pkgs.nvtopPackages.amd
+    inputs.tasks.packages.${pkgs.stdenv.hostPlatform.system}.desktop # Tasks app (tray), from the tasks repo
+  ];
 
   # Extra fonts, on top of the shared set in common/
   fonts.packages = with pkgs; [

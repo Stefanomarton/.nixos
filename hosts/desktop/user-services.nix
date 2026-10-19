@@ -15,11 +15,13 @@ in
       ExecStart = "${home}/.marton-drive/ai-memory/tools/nightly.sh";
     };
   };
-  systemd.user.timers.ai-memory-nightly = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 03:00:00";
-      Persistent = true;
-    };
-  };
+  # Timer disabled 2026-10-19: Hindsight gets only what Claude saves explicitly (retain).
+  # The service stays for a manual run: systemctl --user start ai-memory-nightly
+  # systemd.user.timers.ai-memory-nightly = {
+  #   wantedBy = [ "timers.target" ];
+  #   timerConfig = {
+  #     OnCalendar = "*-*-* 03:00:00";
+  #     Persistent = true;
+  #   };
+  # };
 }
