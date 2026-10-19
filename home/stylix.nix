@@ -51,6 +51,9 @@
           sticky_history = true;
           frame_width = 2;
           mouse_left_click = "do_action, close_current";
+          mouse_right_click = "close_current";
+          mouse_middle_click = "context";
+          dmenu = "${pkgs.tofi}/bin/tofi --prompt-text azione: "; # menu delle azioni (default: /usr/bin/dmenu, assente)
         };
         urgency_low.timeout = 3;
         urgency_normal.timeout = 8;
