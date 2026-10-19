@@ -32,7 +32,8 @@
       enable = true;
       settings = {
         global = {
-          follow = "mouse";
+          follow = "none";
+          monitor = 0; # sempre sul principale: DP-1 sul desktop (dunst 1.13 vuole il numero, non il nome)
           origin = "top-center";
           offset = "(0, 40)";
           width = 500;
@@ -44,10 +45,7 @@
           history_length = 100;
           sticky_history = true;
           frame_width = 2;
-          mouse_left_click = [
-            "do_action"
-            "close_current"
-          ];
+          mouse_left_click = "do_action, close_current";
         };
         urgency_low.timeout = 3;
         urgency_normal.timeout = 8;
