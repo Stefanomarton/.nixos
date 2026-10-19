@@ -33,10 +33,56 @@
       settings = {
         global = {
           follow = "mouse";
+          origin = "top-center";
+          offset = "(0, 40)";
+          width = 500;
+          notification_limit = 3;
+          indicate_hidden = true;
+          stack_duplicates = true;
+          hide_duplicate_count = false;
+          idle_threshold = 120; # lontano dal PC: non scadono
+          history_length = 100;
+          sticky_history = true;
+          frame_width = 2;
           mouse_left_click = [
             "do_action"
             "close_current"
           ];
+        };
+        urgency_low.timeout = 3;
+        urgency_normal.timeout = 8;
+        urgency_critical.timeout = 0; # resta finché la chiudi
+
+        # Regole: le sezioni escono in ordine alfabetico e dunst applica l'ultima che combacia.
+        claude_attende = {
+          appname = "kitty";
+          body = "*needs your input*";
+          urgency = "critical";
+        };
+        # Telefono (KDE Connect): solo cronologia, tranne chiamate e SMS. Nomi da verificare col telefono.
+        telefono = {
+          appname = "*[Cc]onnect*";
+          skip_display = true;
+        };
+        telefono_chiamate = {
+          appname = "*[Cc]onnect*";
+          summary = "*[Cc]all*";
+          skip_display = false;
+        };
+        telefono_chiamate_it = {
+          appname = "*[Cc]onnect*";
+          summary = "*hiamat*";
+          skip_display = false;
+        };
+        telefono_messaggi = {
+          appname = "*[Cc]onnect*";
+          summary = "Messag*";
+          skip_display = false;
+        };
+        telefono_sms = {
+          appname = "*[Cc]onnect*";
+          summary = "*SMS*";
+          skip_display = false;
         };
       };
     };
