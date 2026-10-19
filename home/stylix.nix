@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   stylix = {
@@ -36,7 +36,12 @@
           monitor = 0; # sempre sul principale: DP-1 sul desktop (dunst 1.13 vuole il numero, non il nome)
           origin = "top-center";
           offset = "(0, 40)";
-          width = 500;
+          width = 800;
+          font = lib.mkForce "${config.stylix.fonts.sansSerif.name} 16"; # più grande dei popup stylix (10)
+          padding = 16;
+          horizontal_padding = 20;
+          gap_size = 8;
+          max_icon_size = 64;
           notification_limit = 3;
           indicate_hidden = true;
           stack_duplicates = true;
