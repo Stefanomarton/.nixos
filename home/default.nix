@@ -4,6 +4,9 @@
   home.stateVersion = "24.11";
   programs.home-manager.enable = true;
 
+  # Esclusioni del client Nextcloud (predefinite + cache, worktree, link): in sola lettura, si cambiano qui
+  xdg.configFile."Nextcloud/sync-exclude.lst".source = ./nextcloud-sync-exclude.lst;
+
   programs.opencode = {
     enable = true;
     settings = {
