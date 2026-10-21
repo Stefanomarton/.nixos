@@ -26,6 +26,7 @@
     ../../modules/documents.nix
     ../../modules/web.nix
     ../../modules/portable.nix
+    ../../modules/virtualization.nix # VM Windows
   ];
 
   # Secure Boot: lanzaboote firma kernel e initrd con le chiavi in /var/lib/sbctl

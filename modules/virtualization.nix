@@ -1,3 +1,4 @@
+# Macchine virtuali: libvirt/QEMU con virt-manager, TPM emulato e UEFI Secure Boot (per Windows 11).
 {
   pkgs,
   unstable,
@@ -31,12 +32,8 @@
 
   users.users.${username}.extraGroups = [ "libvirtd" ];
 
-  # Looking Glass shared memory for GPU passthrough
-  systemd.tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 ${username} qemu-libvirtd -" ];
-
   environment.systemPackages = with pkgs; [
     virt-viewer
     virglrenderer
-    looking-glass-client
   ];
 }

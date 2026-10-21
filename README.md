@@ -37,6 +37,7 @@ assets/              esclusioni Nextcloud
 | `documents` | LaTeX, Typst, Pandoc, PDF, LibreOffice, Zotero, note | ✓ | ✓ | ✓ |
 | `web` | Chromium, Thunderbird, Teams, Bitwarden | ✓ | ✓ | ✓ |
 | `portable` | NetworkManager, TLP, luminosità | | ✓ | ✓ |
+| `virtualization` | VM con libvirt/QEMU e virt-manager, TPM emulato e UEFI Secure Boot (Windows 11) | ✓ | | ✓ |
 | `homelab` | Netbird, Nextcloud, Home Assistant, Moonlight, opencode su LLM locali | ✓ | ✓ | |
 | `phone` | KDE Connect, scrcpy, adb | ✓ | ✓ | |
 | `remote` | AnyDesk, Remmina, FreeRDP | ✓ | ✓ | |
@@ -57,6 +58,7 @@ Tutto è in [`hosts/tm-laptop/`](hosts/tm-laptop/): `default.nix` per la configu
 | VPN | OpenVPN (`openvpn-tm.service`), si accende a mano. Il profilo `.ovpn` sta in `/etc/openvpn/tm.ovpn` (root, 600) e non è nel repository |
 | Rete | firewall NixOS attivo, nessuna porta in ingresso aperta |
 | Software | solo le feature di lavoro (tabella sopra); niente accesso remoto, niente servizi dell'homelab |
+| VM Windows | libvirt/QEMU; i dischi delle VM (`/var/lib/libvirt/images`) stanno dentro il volume cifrato. Rete NAT: la VM esce attraverso il portatile, VPN compresa, e da fuori non è raggiungibile |
 
 Il repository è pubblico: non contiene segreti, profili VPN, chiavi o nomi interni di TEAM mastery.
 
@@ -130,6 +132,24 @@ Se la VPN chiede utente e password: scriverli su due righe in `/etc/openvpn/tm.a
 aggiungere al profilo la riga `auth-user-pass /etc/openvpn/tm.auth`.
 
 **5.** Committare il nuovo `hosts/tm-laptop/hardware-configuration.nix`.
+
+### VM Windows
+
+Una volta sola: avviare la rete NAT di libvirt e scaricare i driver VirtIO per Windows.
+
+```bash
+sudo virsh net-autostart default && sudo virsh net-start default
+curl -LO https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+```
+
+In virt-manager: *Nuova VM* → ISO di Windows → prima di installare spuntare *Personalizza configurazione*:
+
+- **Panoramica → Firmware**: UEFI con Secure Boot (`OVMF_CODE.secboot`);
+- **Aggiungi hardware → TPM**: emulato, versione 2.0 (Windows 11 lo richiede);
+- **Disco e rete**: bus `VirtIO`, più un secondo lettore CD con `virtio-win.iso`. Durante
+  l'installazione, *Carica driver* → `viostor\w11\amd64`, per far vedere il disco a Windows;
+- **Dopo l'installazione**: dentro Windows, `virtio-win-guest-tools.exe` dallo stesso CD (driver di rete,
+  video e appunti condivisi).
 
 ### Verifiche
 

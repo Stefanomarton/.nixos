@@ -11,7 +11,7 @@
   imports = [
     ./hardware-configuration.nix
     ./network.nix
-    ./virtualization.nix
+    ./looking-glass.nix
     ./user-services.nix
 
     ../../modules/base.nix
@@ -23,6 +23,7 @@
     ../../modules/dev.nix
     ../../modules/documents.nix
     ../../modules/web.nix
+    ../../modules/virtualization.nix
 
     ../../modules/homelab.nix
     ../../modules/phone.nix
