@@ -1,6 +1,17 @@
-{ pkgs, ... }:
+# Base di ogni host: avvio, nix, lingua, utente, home-manager.
+{
+  pkgs,
+  inputs,
+  hostname,
+  username,
+  ...
+}:
 
 {
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
+
+  networking.hostName = hostname;
+
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -60,27 +71,39 @@
 
   console.keyMap = "us-acentos";
 
-  security = {
-    polkit.enable = true;
-    rtkit.enable = true;
+  users.users.${username} = {
+    isNormalUser = true;
+    uid = 1000; # stesso uid su ogni host (e sul laptop lo stesso del vecchio utente stefanom)
+    description = "Stefano Marton";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
-  services = {
-    dbus.enable = true;
-    gnome.gnome-keyring.enable = true;
-  };
+  security.polkit.enable = true;
+  services.dbus.enable = true;
 
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "always";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
+  environment.etc."zshenv".text = ''
+    export ZDOTDIR="$HOME"/.config/zsh
+    export HISTFILE="$XDG_STATE_HOME"/zsh/history
+  '';
+
+  environment.etc."xdg/user-dirs.defaults".text = ''
+    DESKTOP="$HOME/.desktop"
+    DOWNLOAD="$HOME/inbox"
+  '';
+
+  systemd.settings.Manager.DefaultTimeoutStopSec = "10s";
+
+  # Le feature aggiungono la loro parte home con home-manager.users.${username}
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    backupFileExtension = "backup";
+    users.${username} = {
+      home.stateVersion = "24.11";
+      programs.home-manager.enable = true;
     };
   };
 }

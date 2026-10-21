@@ -1,59 +1,35 @@
-# Claude Code Context
+# NixOS flake: desktop, laptop, tm-laptop
 
-NixOS flake for two hosts: laptop and desktop.
+Panoramica e procedure (installazione tm-laptop, migrazione utente laptop) in README.md: tienilo allineato.
 
-## Architecture
+## Struttura
 
-- **`flake.nix`** — inputs, the `mkHost` helper (inline), and the two hosts
-- **`common/`** — everything both machines share; auto-imported by `mkHost`
-- **`hosts/<hostname>/`** — host-specific only (hardware, network, services)
-- **`home/`** — home-manager config with stylix theming
+- `flake.nix`: input e `mkHost hostname`, che passa `inputs`, `unstable`, `hostname` e `username = "sm"` come specialArgs e importa solo `hosts/<hostname>`.
+- `hosts/<host>/default.nix`: elenca negli `imports` le feature da `modules/`, più hardware e servizi solo suoi.
+- `modules/<feature>.nix`: una feature per file (pacchetti, servizi e la sua parte home-manager in `home-manager.users.${username}`). Prima riga: commento su cosa contiene.
+- `assets/`: file referenziati dai moduli (sfondo, esclusioni Nextcloud).
 
-`mkHost` builds `nixpkgs.lib.nixosSystem` with `modules = [ ./common ./hosts/${hostname} ] ++ extraModules`
-and passes `inputs`, `unstable`, `hostname`, `username` through `specialArgs`.
+Feature personali (`homelab`, `phone`, `remote`, `maker`, `media`): mai su `tm-laptop`.
 
-## Hosts
+## Regole
 
-| Host | User | stateVersion | Key features |
-|------|------|--------------|--------------|
-| laptop | stefanom | 24.05 | NetworkManager, Tailscale, TLP, KDE Connect |
-| desktop | sm | 25.11 | bridge+VLANs, AMD GPU/ROCm, Ollama, Sunshine, libvirtd + Looking Glass, openlogi, kmonad module |
+- Repo **pubblico**: niente segreti, profili VPN, chiavi o nomi interni di TEAM mastery. I segreti stanno fuori dal repo (es. `/etc/openvpn/tm.ovpn`) e i moduli li leggono da un percorso.
+- tm-laptop: login automatico e niente blocco schermo sono una scelta di Stefano, non correggerli.
+- `hosts/tm-laptop/hardware-configuration.nix` è provvisorio finché la macchina non viene installata; i dischi li descrive `disk.nix` (disko).
+- Pacchetti unstable: `unstable.pkg`. Input del flake: `inputs.x.packages.${pkgs.stdenv.hostPlatform.system}` (mai `pkgs.system`).
+- Unfree permesso; `permittedInsecurePackages` sta solo in `flake.nix`.
+- Commenti in italiano, brevi, solo dove il perché non è ovvio.
 
-## File purposes
+## Verifica
 
-| File | Purpose |
-|------|---------|
-| `common/default.nix` | user (`users.users.${username}`), greetd→Hyprland, udev uinput, `/etc/zshenv`, xdg user-dirs, base fonts, home-manager wiring |
-| `common/system.nix` | zen kernel, systemd-boot, nix settings + GC, Europe/Rome + it_IT locales, polkit/rtkit/keyring |
-| `common/desktop.nix` | Hyprland (flake package), PipeWire, Bluetooth, udisks2/gvfs/flatpak |
-| `common/packages.nix` | all system packages (~250), plus netbird/emacs/obs/direnv programs |
-| `hosts/desktop/network.nix` | br0 bridge + vlan10/20/40, static IPs, default route on br0 |
-| `hosts/desktop/virtualization.nix` | libvirtd/QEMU/swtpm, virt-manager, `libvirtd` group, Looking Glass shm |
-| `home/stylix.nix` | theme black-metal-nile, dunst |
-
-## Key patterns
-
-```nix
-# unstable packages
-{ unstable, ... }: { environment.systemPackages = [ unstable.pkg ]; }
-
-# flake inputs (never destructured as top-level args)
-{ pkgs, inputs, ... }:
-let system = pkgs.stdenv.hostPlatform.system;
-in { environment.systemPackages = [ inputs.neovim.packages.${system}.default ]; }
-```
-
-- Never hardcode a username in `common/` — use the `username` arg.
-- Use `pkgs.stdenv.hostPlatform.system`, not the deprecated `pkgs.system`.
-- Adding a flake input = one edit (the `inputs` block); `outputs` takes `@inputs`.
-- Unfree allowed; `permittedInsecurePackages` is set once in `flake.nix`.
-
-## Rebuild
+Senza buildare (deve uscire senza warning, per ogni host):
 
 ```bash
-sudo nixos-rebuild switch --flake .#laptop
-sudo nixos-rebuild switch --flake .#desktop
+nix eval --raw .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath
 ```
 
-Cheap check without building: `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath`
-(must be warning-free).
+Spostando pacchetti tra feature, confronta la lista prima e dopo:
+
+```bash
+nix eval --json .#nixosConfigurations.<host>.config.environment.systemPackages --apply 'map (p: p.name)' | jq -r '.[]' | sort
+```

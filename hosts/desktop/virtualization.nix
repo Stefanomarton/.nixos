@@ -36,6 +36,7 @@
 
   environment.systemPackages = with pkgs; [
     virt-viewer
+    virglrenderer
     looking-glass-client
   ];
 }

@@ -1,4 +1,11 @@
-{ config, pkgs, unstable, inputs, ... }:
+# desktop: PC fisso di casa (AMD), homelab, VM con passthrough GPU, LLM locali.
+{
+  config,
+  pkgs,
+  unstable,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -6,6 +13,22 @@
     ./network.nix
     ./virtualization.nix
     ./user-services.nix
+
+    ../../modules/base.nix
+    ../../modules/hyprland.nix
+    ../../modules/theme.nix
+    ../../modules/keyboard.nix
+    ../../modules/tools.nix
+    ../../modules/editors.nix
+    ../../modules/dev.nix
+    ../../modules/documents.nix
+    ../../modules/web.nix
+
+    ../../modules/homelab.nix
+    ../../modules/phone.nix
+    ../../modules/remote.nix
+    ../../modules/maker.nix
+    ../../modules/media.nix
   ];
 
   # AMD GPU
@@ -59,15 +82,13 @@
         });
   };
 
-  programs.openlogi.enable = true;
-
   environment.systemPackages = [
     pkgs.nvtopPackages.amd
     config.services.hyprwhspr-rs.package # `hyprwhspr-rs record …` for hypr/scripts/dettatura-emacs.sh
     inputs.tasks.packages.${pkgs.stdenv.hostPlatform.system}.desktop # Tasks app (tray), from the tasks repo
   ];
 
-  # Extra fonts, on top of the shared set in common/
+  # Extra fonts, on top of the shared set in modules/theme.nix
   fonts.packages = with pkgs; [
     alegreya-sans
     alegreya

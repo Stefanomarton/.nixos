@@ -1,23 +1,27 @@
-{ pkgs, ... }:
+# laptop: portatile personale (Intel).
+{ ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
 
-  networking.networkmanager.enable = true;
+    ../../modules/base.nix
+    ../../modules/hyprland.nix
+    ../../modules/theme.nix
+    ../../modules/keyboard.nix
+    ../../modules/tools.nix
+    ../../modules/editors.nix
+    ../../modules/dev.nix
+    ../../modules/documents.nix
+    ../../modules/web.nix
+    ../../modules/portable.nix
 
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "ondemand";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      START_CHARGE_THRESH_BAT0 = 40;
-      STOP_CHARGE_THRESH_BAT0 = 80;
-    };
-  };
-
-  environment.systemPackages = [ pkgs.brightnessctl ];
+    ../../modules/homelab.nix
+    ../../modules/phone.nix
+    ../../modules/remote.nix
+    ../../modules/maker.nix
+    ../../modules/media.nix
+  ];
 
   system.stateVersion = "24.05";
 }

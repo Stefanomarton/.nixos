@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration for laptop and desktop";
+  description = "NixOS di Stefano: desktop, laptop e tm-laptop";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -9,7 +9,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix.url = "github:danth/stylix/release-26.05";
-    kimi.url = "github:MoonshotAI/kimi-cli";
+
+    # Solo tm-laptop: disco cifrato dichiarativo e Secure Boot
+    disko = {
+      url = "github:nix-community/disko/v1.13.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.2.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     claude-code.url = "github:sadjow/claude-code-nix";
     cpm.url = "github:JakubKontra/claude-profile-manager";
     neovim.url = "github:nix-community/neovim-nightly-overlay";
@@ -19,10 +29,6 @@
     reshiki = {
       url = "github:Ameyanagi/ReShiki";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    openlogi = {
-      url = "github:AprilNEA/OpenLogi";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -42,39 +48,25 @@
           config = nixpkgsConfig;
         };
 
-      # Every host gets common/ + its own hosts/<hostname>/.
+      # Ogni host è hosts/<hostname>/default.nix, che importa le feature che usa da modules/.
       mkHost =
-        {
-          hostname,
-          username,
-          extraModules ? [ ],
-        }:
+        hostname:
         nixpkgs.lib.nixosSystem {
           inherit system;
           pkgs = pkgsFrom nixpkgs;
           specialArgs = {
-            inherit inputs hostname username;
+            inherit inputs hostname;
+            username = "sm";
             unstable = pkgsFrom nixpkgs-unstable;
           };
-          modules = [
-            ./common
-            ./hosts/${hostname}
-          ]
-          ++ extraModules;
+          modules = [ ./hosts/${hostname} ];
         };
     in
     {
-      nixosConfigurations = {
-        laptop = mkHost {
-          hostname = "laptop";
-          username = "stefanom";
-        };
-
-        desktop = mkHost {
-          hostname = "desktop";
-          username = "sm";
-          extraModules = [ inputs.openlogi.nixosModules.default ];
-        };
-      };
+      nixosConfigurations = nixpkgs.lib.genAttrs [
+        "desktop"
+        "laptop"
+        "tm-laptop"
+      ] mkHost;
     };
 }
