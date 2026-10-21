@@ -8,7 +8,10 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix/release-26.05";
+    stylix = {
+      url = "github:danth/stylix/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Solo tm-laptop: disco cifrato dichiarativo e Secure Boot
     disko = {
@@ -21,11 +24,20 @@
     };
 
     claude-code.url = "github:sadjow/claude-code-nix";
-    cpm.url = "github:JakubKontra/claude-profile-manager";
-    neovim.url = "github:nix-community/neovim-nightly-overlay";
+    cpm = {
+      url = "github:JakubKontra/claude-profile-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    # Senza follows: così resta valida la cache precompilata di hyprland.cachix.org
     hyprland.url = "github:hyprwm/Hyprland";
-    pyprland.url = "github:hyprland-community/pyprland";
-    tasks.url = "git+https://github.com/Stefanomarton/tasks?ref=feat/v0";
+    pyprland = {
+      url = "github:hyprland-community/pyprland";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    tasks = {
+      url = "git+https://github.com/Stefanomarton/tasks?ref=feat/v0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     reshiki = {
       url = "github:Ameyanagi/ReShiki";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -37,15 +49,11 @@
     let
       system = "x86_64-linux";
 
-      nixpkgsConfig = {
-        allowUnfree = true;
-        permittedInsecurePackages = [ "electron-39.8.10" ];
-      };
       pkgsFrom =
         source:
         import source {
           inherit system;
-          config = nixpkgsConfig;
+          config.allowUnfree = true;
         };
 
       # Ogni host è hosts/<hostname>/default.nix, che importa le feature che usa da modules/.

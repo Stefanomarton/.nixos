@@ -1,8 +1,9 @@
 # Portatili: rete con NetworkManager, batteria con TLP, luminosità.
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   networking.networkmanager.enable = true;
+  users.users.${username}.extraGroups = [ "networkmanager" ];
 
   services.tlp = {
     enable = true;

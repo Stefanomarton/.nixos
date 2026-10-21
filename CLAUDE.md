@@ -17,7 +17,8 @@ Feature personali (`homelab`, `phone`, `remote`, `maker`, `media`): mai su `tm-l
 - tm-laptop: login automatico e niente blocco schermo sono una scelta di Stefano, non correggerli.
 - `hosts/tm-laptop/hardware-configuration.nix` è provvisorio finché la macchina non viene installata; i dischi li descrive `disk.nix` (disko).
 - Pacchetti unstable: `unstable.pkg`. Input del flake: `inputs.x.packages.${pkgs.stdenv.hostPlatform.system}` (mai `pkgs.system`).
-- Unfree permesso; `permittedInsecurePackages` sta solo in `flake.nix`.
+- Unfree permesso (in `flake.nix`); niente pacchetti segnalati insicuri.
+- Input del flake con `inputs.nixpkgs.follows` (nixpkgs o nixpkgs-unstable), tranne hyprland: tiene il suo nixpkgs per usare la cache hyprland.cachix.org.
 - Commenti in italiano, brevi, solo dove il perché non è ovvio.
 
 ## Verifica

@@ -32,7 +32,6 @@ in
 
       # Note, studio, bibliografia
       obsidian
-      logseq
       zotero
       anki
     ]

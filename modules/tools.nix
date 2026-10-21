@@ -23,7 +23,6 @@
       jq
       moor
       libqalculate
-      busybox
       socat
       stow
       ffmpeg

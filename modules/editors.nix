@@ -1,10 +1,5 @@
-# Editor: Emacs (demone, editor predefinito), Neovim nightly, VS Code, correttori ortografici.
-{
-  pkgs,
-  unstable,
-  inputs,
-  ...
-}:
+# Editor: Emacs (demone, editor predefinito), Neovim, VS Code, correttori ortografici.
+{ pkgs, unstable, ... }:
 
 {
   services.emacs = {
@@ -17,7 +12,6 @@
   environment.systemPackages =
     with pkgs;
     [
-      inputs.neovim.packages.${stdenv.hostPlatform.system}.default
       emacsPackages.jinx
       emacs-lsp-booster
       vscode
@@ -36,5 +30,8 @@
       hunspellDicts.en_US
       hunspellDicts.it_IT
     ]
-    ++ [ unstable.neovide ];
+    ++ (with unstable; [
+      neovim
+      neovide
+    ]);
 }

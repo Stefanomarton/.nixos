@@ -2,10 +2,8 @@
 { pkgs, username, ... }:
 
 {
-  # Let kmonad & friends write to /dev/uinput
-  services.udev.extraRules = ''
-    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
-  '';
+  # /dev/uinput scrivibile dal gruppo uinput (per kmonad): crea il gruppo e carica il modulo
+  hardware.uinput.enable = true;
 
   users.users.${username}.extraGroups = [
     "input"
