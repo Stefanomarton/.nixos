@@ -20,7 +20,7 @@ sudo nixos-rebuild switch --flake ~/.nixos#<host>
 flake.nix            input e i tre host
 modules/             una feature per file
 hosts/<host>/        cosa usa l'host + hardware e servizi solo suoi
-assets/              sfondo, esclusioni Nextcloud
+assets/              esclusioni Nextcloud
 ```
 
 ## Feature

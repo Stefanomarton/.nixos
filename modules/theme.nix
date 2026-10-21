@@ -27,7 +27,7 @@
         polarity = "dark";
         # inert under home-manager.useGlobalPkgs, and silences its warning
         overlays.enable = false;
-        image = ../assets/wallpaper.png;
+        # Niente image: lo sfondo lo mette hyprpaper con ~/.config/hypr/hyprpaper.conf (dotfile)
         base16Scheme = "${pkgs.base16-schemes}/share/themes/black-metal-nile.yaml";
         targets = {
           gtk.enable = true;
@@ -35,7 +35,6 @@
           kitty.enable = true;
           kitty.variant256Colors.enable = true;
           hyprland.enable = true;
-          hyprpaper.enable = true;
           nushell.enable = true;
           yazi.enable = true;
         };

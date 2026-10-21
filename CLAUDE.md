@@ -7,7 +7,7 @@ Panoramica e installazione del tm-laptop in README.md: tienilo allineato.
 - `flake.nix`: input e `mkHost hostname`, che passa `inputs`, `unstable`, `hostname` e `username = "sm"` come specialArgs e importa solo `hosts/<hostname>`.
 - `hosts/<host>/default.nix`: elenca negli `imports` le feature da `modules/`, più hardware e servizi solo suoi.
 - `modules/<feature>.nix`: una feature per file (pacchetti, servizi e la sua parte home-manager in `home-manager.users.${username}`). Prima riga: commento su cosa contiene.
-- `assets/`: file referenziati dai moduli (sfondo, esclusioni Nextcloud).
+- `assets/`: file referenziati dai moduli (esclusioni Nextcloud).
 
 Feature personali (`homelab`, `phone`, `remote`, `maker`, `media`): mai su `tm-laptop`.
 
