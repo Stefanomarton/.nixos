@@ -1,6 +1,6 @@
 # NixOS flake: desktop, laptop, tm-laptop
 
-Panoramica e procedure (installazione tm-laptop, migrazione utente laptop) in README.md: tienilo allineato.
+Panoramica e installazione del tm-laptop in README.md: tienilo allineato.
 
 ## Struttura
 

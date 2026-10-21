@@ -166,22 +166,3 @@ nix flake update && sudo nixos-rebuild switch --flake ~/.nixos#<host>   # aggior
 | una feature nuova | nuovo file `modules/<nome>.nix`, poi aggiungerlo agli `imports` degli host che la vogliono |
 | un host nuovo | `hosts/<nome>/default.nix` + `hardware-configuration.nix`, poi il nome nella lista in `flake.nix` |
 
-## laptop: passaggio da `stefanom` a `sm`
-
-Una volta sola, prima del primo rebuild con questa configurazione. Il nuovo utente ha lo stesso uid
-(1000): basta spostare la home, senza cambiare i permessi.
-
-```bash
-id -u stefanom                                  # deve essere 1000, altrimenti: chown -R sm:users /home/sm dopo il passo 3
-# In una console testuale (Ctrl+Alt+F3), entrando come stefanom:
-sudo systemctl stop greetd                      # chiude Hyprland
-sudo mv /home/stefanom /home/sm
-sudo nixos-rebuild switch --flake /home/sm/.nixos#laptop
-sudo reboot
-```
-
-Dopo il riavvio, cercare i percorsi rimasti scritti a mano nei dotfile:
-
-```bash
-rg -l /home/stefanom ~
-```

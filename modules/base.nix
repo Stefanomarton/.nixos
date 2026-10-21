@@ -73,7 +73,7 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    uid = 1000; # stesso uid su ogni host (e sul laptop lo stesso del vecchio utente stefanom)
+    uid = 1000;
     description = "Stefano Marton";
     extraGroups = [
       "networkmanager"

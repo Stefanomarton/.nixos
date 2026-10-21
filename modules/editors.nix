@@ -36,8 +36,5 @@
       hunspellDicts.en_US
       hunspellDicts.it_IT
     ]
-    ++ (with unstable; [
-      neovide
-      antigravity-ide
-    ]);
+    ++ [ unstable.neovide ];
 }
