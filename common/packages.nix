@@ -83,6 +83,7 @@ in
     with pkgs;
     [
       inputs.pyprland.packages.${system}.pyprland
+      inputs.reshiki.packages.${system}.default
       # Editors
       inputs.neovim.packages.${system}.default
       emacsPackages.jinx
@@ -171,7 +172,6 @@ in
       freecad
       prusa-slicer
       orca-slicer
-      clickup
 
       # Social
       ferdium
@@ -258,7 +258,6 @@ in
       teams-for-linux
       anydesk
       herdr
-      claude-agent-acp
       yazi
       btop-rocm
       libreoffice
@@ -274,6 +273,5 @@ in
       gmailctl
       thunderbird
       bitwarden-desktop
-      ticktick
     ]);
 }

@@ -1,4 +1,4 @@
-{ pkgs, unstable, inputs, ... }:
+{ config, pkgs, unstable, inputs, ... }:
 
 {
   imports = [
@@ -42,16 +42,28 @@
 
   services.hyprwhspr-rs = {
     enable = true;
-    package = pkgs.hyprwhspr-rs.override {
-      whisper-cpp = pkgs.whisper-cpp.override { rocmSupport = true; };
-      onnxruntime = pkgs.onnxruntime.override { rocmSupport = true; };
-    };
+    package =
+      (pkgs.hyprwhspr-rs.override {
+        # Vulkan, not ROCm: nixpkgs passes GGML_HIPBLAS, which ggml no longer reads, so a ROCm build ends up CPU-only
+        whisper-cpp = pkgs.whisper-cpp.override { vulkanSupport = true; };
+      }).overrideAttrs
+        (old: {
+          # whisper-cli is called with a hard-coded `--language en`; auto-detect so Italian dictation isn't read as English
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace src/whisper/manager.rs --replace-fail '"en",' '"auto",'
+            # The paste shortcut uses the legacy `dispatch sendshortcut` syntax, which a Lua Hyprland config rejects
+            substituteInPlace src/input/injector.rs --replace-fail \
+              'format!("dispatch sendshortcut {mods_segment}, {key}{target_segment}")' \
+              'format!("dispatch hl.dsp.send_shortcut({{ mods = \"{mods_segment}\", key = \"{key}\" }})")'
+          '';
+        });
   };
 
   programs.openlogi.enable = true;
 
   environment.systemPackages = [
     pkgs.nvtopPackages.amd
+    config.services.hyprwhspr-rs.package # `hyprwhspr-rs record …` for hypr/scripts/dettatura-emacs.sh
     inputs.tasks.packages.${pkgs.stdenv.hostPlatform.system}.desktop # Tasks app (tray), from the tasks repo
   ];
 
