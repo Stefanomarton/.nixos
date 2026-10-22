@@ -15,7 +15,11 @@ in
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    package = hyprPkgs.hyprland;
+    # Patch: il focus al passaggio del mouse sceglie la finestra tiled disegnata sopra (le carte
+    # di custom_center2 si sovrappongono). Perde la cache cachix: Hyprland si compila in locale.
+    package = hyprPkgs.hyprland.overrideAttrs (old: {
+      patches = (old.patches or [ ]) ++ [ ../assets/hyprland-tiled-hit-order.patch ];
+    });
     portalPackage = hyprPkgs.xdg-desktop-portal-hyprland;
   };
 

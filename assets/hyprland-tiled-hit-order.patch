@@ -1,0 +1,22 @@
+--- a/src/desktop/state/ViewHitTester.cpp	2026-10-22 23:51:33.508461123 +0200
++++ b/src/desktop/state/ViewHitTester.cpp	2026-10-22 23:51:33.527302219 +0200
+@@ -180,7 +180,18 @@
+             }
+         }
+ 
+-        for (auto const& w : WINDOWS) {
++        // Tiled windows can overlap (custom layouts): test them in render order, topmost first.
++        // The renderer draws the focused window last, the others newest on top.
++        std::vector<PHLWINDOW> tiledOrder;
++        tiledOrder.reserve(WINDOWS.size());
++        if (LASTFOCUSED)
++            tiledOrder.emplace_back(LASTFOCUSED);
++        for (auto const& w : WINDOWS | std::views::reverse) {
++            if (w != LASTFOCUSED)
++                tiledOrder.emplace_back(w);
++        }
++
++        for (auto const& w : tiledOrder) {
+             if (ONLY_PRIORITY && !w->priorityFocus())
+                 continue;
+ 
