@@ -11,9 +11,9 @@
   # monolithic libvirtd daemon.
   virtualisation.libvirtd = {
     enable = true;
-    package = unstable.libvirt;
+    package = pkgs.libvirt; # stable: con unstable cifra i segreti con un systemd più nuovo del sistema e libvirtd non parte
     qemu = {
-      package = unstable.qemu;
+      package = unstable.qemu; # resta unstable: le VM create con un qemu più nuovo non partirebbero con quello stable
       runAsRoot = false;
       swtpm.enable = true;
       vhostUserPackages = [ pkgs.virtiofsd ];
@@ -27,7 +27,7 @@
 
   programs.virt-manager = {
     enable = true;
-    package = unstable.virt-manager;
+    package = pkgs.virt-manager;
   };
 
   users.users.${username}.extraGroups = [ "libvirtd" ];

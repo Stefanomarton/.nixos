@@ -138,6 +138,9 @@ aggiungere al profilo la riga `auth-user-pass /etc/openvpn/tm.auth`.
 Una volta sola: avviare la rete NAT di libvirt e scaricare i driver VirtIO per Windows.
 
 ```bash
+# solo se libvirtd fallisce con status=243/CREDENTIALS (chiave dei segreti cifrata da un libvirt
+# di unstable, prima del ritorno a stable): rigenerarla
+sudo rm /var/lib/libvirt/secrets/secrets-encryption-key && sudo systemctl restart libvirtd
 sudo virsh net-autostart default && sudo virsh net-start default
 curl -LO https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
 ```
