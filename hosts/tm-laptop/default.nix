@@ -53,6 +53,13 @@
     updateResolvConf = true; # DNS dati dalla VPN
   };
 
+  # 16 GB saldati e nessuna partizione di swap: con la VM Windows accesa serve margine
+  zramSwap.enable = true;
+
+  # Lettore di impronte Synaptics 06cb:0106 (driver synaptics di libfprint).
+  # Registrazione: fprintd-enroll; poi vale per sudo e polkit (login e blocco schermo non ci sono).
+  services.fprintd.enable = true;
+
   environment.systemPackages = with pkgs; [
     sbctl # chiavi e verifica Secure Boot
     tpm2-tools
