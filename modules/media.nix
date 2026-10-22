@@ -24,7 +24,6 @@
       obs-cli
 
       # Messaggi e giochi
-      ferdium
       prismlauncher
     ]
     ++ [ unstable.altus ];

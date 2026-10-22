@@ -31,5 +31,6 @@ in
     gmailctl
     teams-for-linux
     bitwarden-desktop
+    ferdium
   ]);
 }
