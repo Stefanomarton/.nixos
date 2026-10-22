@@ -63,6 +63,7 @@
     autoStart = true;
     capSysAdmin = true; # needed for KMS/WLR screen capture
     openFirewall = true;
+    settings.capture = "wlr"; # niente portalgrab: evita il selettore di condivisione al login
   };
 
   services.hyprwhspr-rs = {
