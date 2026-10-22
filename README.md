@@ -36,7 +36,7 @@ assets/              esclusioni Nextcloud
 | `dev` | git, linguaggi, LSP, Claude Code | ✓ | ✓ | ✓ |
 | `documents` | LaTeX, Typst, Pandoc, PDF, LibreOffice, Zotero, note | ✓ | ✓ | ✓ |
 | `web` | Chromium, Thunderbird, Teams, Bitwarden | ✓ | ✓ | ✓ |
-| `portable` | NetworkManager, TLP, luminosità | | ✓ | ✓ |
+| `portable` | NetworkManager, TLP, luminosità; bolt per la dock Thunderbolt; pressione breve del tasto di accensione ignorata (il tasto della dock HP arriva come quello) | | ✓ | ✓ |
 | `virtualization` | VM con libvirt/QEMU e virt-manager, TPM emulato e UEFI Secure Boot (Windows 11) | ✓ | | ✓ |
 | `homelab` | Netbird, Nextcloud, Home Assistant, Moonlight, opencode su LLM locali | ✓ | ✓ | |
 | `phone` | KDE Connect, scrcpy, adb | ✓ | ✓ | |
