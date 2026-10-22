@@ -12,6 +12,7 @@
     ../../modules/tools.nix
     ../../modules/editors.nix
     ../../modules/dev.nix
+    ../../modules/git-sync.nix
     ../../modules/documents.nix
     ../../modules/web.nix
     ../../modules/portable.nix
