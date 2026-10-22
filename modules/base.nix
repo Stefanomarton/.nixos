@@ -1,5 +1,6 @@
 # Base di ogni host: avvio, nix, lingua, utente, home-manager.
 {
+  config,
   pkgs,
   inputs,
   hostname,
@@ -78,6 +79,33 @@
 
   security.polkit.enable = true;
   services.dbus.enable = true;
+
+  # Via PAM: le vedono anche le app di Hyprland e i servizi utente, non solo zsh.
+  # Tutto da $HOME: in PAM un riferimento a un'altra variabile dipende dall'ordine.
+  environment.sessionVariables = {
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+    XDG_DESKTOP_DIR = "$HOME/";
+    NPM_CONFIG_INIT_MODULE = "$HOME/.config/npm/config/npm-init.js";
+    NPM_CONFIG_CACHE = "$HOME/.cache/npm";
+    NPM_CONFIG_TMP = "/run/user/${toString config.users.users.${username}.uid}/npm";
+    ANDROID_USER_HOME = "$HOME/.local/share/android";
+    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$HOME/.config/java";
+    NODE_REPL_HISTORY = "$HOME/.local/share/node_repl_history";
+    LESSHISTFILE = "$HOME/.cache/less/history";
+    GTK2_RC_FILES = "$HOME/.config/gtk-2.0/gtkrc";
+    GNUPGHOME = "$HOME/.local/share/gnupg";
+    CUDA_CACHE_PATH = "$HOME/.cache/nv";
+    CARGO_HOME = "$HOME/.local/share/cargo";
+    STARSHIP_CONFIG = "$HOME/.config/starship.toml";
+    NUGET_PACKAGES = "$HOME/.cache/NuGetPackages";
+    GOPATH = "$HOME/.local/share/go";
+    MYPY_CACHE_DIR = "$HOME/.cache/mypy";
+    TEXMFVAR = "$HOME/.cache/texlive/texmf-var";
+    DOTNET_CLI_HOME = "$HOME/.local/share/dotnet";
+  };
 
   environment.etc."zshenv".text = ''
     export ZDOTDIR="$HOME"/.config/zsh
