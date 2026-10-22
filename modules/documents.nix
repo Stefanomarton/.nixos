@@ -12,7 +12,13 @@ let
   };
 in
 {
-  xdg.mime.defaultApplications."application/pdf" = "sioyek.desktop";
+  xdg.mime.defaultApplications = {
+    "application/pdf" = "sioyek.desktop";
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
+      "ai.storyteller.wordcraft.desktop";
+    "application/vnd.oasis.opendocument.text" = "ai.storyteller.wordcraft.desktop";
+    "application/rtf" = "ai.storyteller.wordcraft.desktop";
+  };
 
   environment.systemPackages =
     with pkgs;
@@ -40,6 +46,7 @@ in
       typstyle
       tinymist
       pandoc
-      libreoffice
+      wordcraft # testi; export PDF con wordcraft-cli convert
+      libreoffice # fogli di calcolo e conversioni headless (soffice) delle skill di Claude
     ]);
 }
