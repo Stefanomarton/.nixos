@@ -15,7 +15,7 @@ in
 {
   programs.chromium.enable = true;
 
-  # Bitwarden fuori dal browser: rbw-agent tiene il vault (Vaultwarden) sbloccato in memoria,
+  # Bitwarden fuori dal browser: rbw-agent tiene il vault sbloccato in memoria,
   # Super+P cerca e scrive le credenziali (rofi-rbw su fuzzel), e fa da agente SSH
   # al posto di gcr-ssh-agent. rbw-agent parte da autostart.lua di Hyprland.
   services.gnome.gcr-ssh-agent.enable = false;
@@ -28,8 +28,7 @@ in
       enable = true;
       package = unstable.rbw; # agente SSH dalla 1.14
       settings = {
-        email = "sstefanomarton@gmail.com";
-        base_url = "https://pswd.borsini.org";
+        email = "sstefanomarton@gmail.com"; # server ufficiale (USA), il predefinito di rbw
         pinentry = pkgs.pinentry-gnome3;
       };
     };
