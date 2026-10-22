@@ -1,5 +1,10 @@
-# Browser, posta, comunicazione, password.
-{ pkgs, unstable, ... }:
+# Browser, posta, comunicazione, password, Tasks (task e mail, dal repo tasks).
+{
+  pkgs,
+  unstable,
+  inputs,
+  ...
+}:
 
 let
   browser = "chromium-browser.desktop";
@@ -24,6 +29,7 @@ in
 
   environment.systemPackages = [
     pkgs.buku
+    inputs.tasks.packages.${pkgs.stdenv.hostPlatform.system}.desktop # app Tasks (tray)
   ]
   ++ (with unstable; [
     chromium

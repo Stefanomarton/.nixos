@@ -86,7 +86,6 @@
   environment.systemPackages = [
     pkgs.nvtopPackages.amd
     config.services.hyprwhspr-rs.package # `hyprwhspr-rs record …` for hypr/scripts/dettatura-emacs.sh
-    inputs.tasks.packages.${pkgs.stdenv.hostPlatform.system}.desktop # Tasks app (tray), from the tasks repo
   ];
 
   # Extra fonts, on top of the shared set in modules/theme.nix
