@@ -83,6 +83,8 @@
     export ZDOTDIR="$HOME"/.config/zsh
     export HISTFILE="$XDG_STATE_HOME"/zsh/history
   '';
+  # zsh non crea la cartella della history: senza, su un'installazione nuova non salva nulla
+  systemd.tmpfiles.rules = [ "d /home/${username}/.local/state/zsh 0700 ${username} users -" ];
 
   environment.etc."xdg/user-dirs.defaults".text = ''
     DESKTOP="$HOME/.desktop"
