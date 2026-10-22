@@ -990,11 +990,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792599540,
-        "narHash": "sha256-oqwHtFRMFFap9kI0ffWQtB2B71a6vzcxYH64+iWdg/M=",
+        "lastModified": 1792712004,
+        "narHash": "sha256-amQPHo7j8FXMp1U8ap2Vedk91dR9VpEpmFeLCAFwQtM=",
         "ref": "feat/v0",
-        "rev": "0ffd231a05e1f4547b4eff72420a7e12d949b8d7",
-        "revCount": 244,
+        "rev": "aae18ebccf83c6d3d9e8a3af879b2fd6b5ab46dc",
+        "revCount": 266,
         "type": "git",
         "url": "https://github.com/Stefanomarton/tasks"
       },
