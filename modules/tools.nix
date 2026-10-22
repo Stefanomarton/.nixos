@@ -3,7 +3,10 @@
 
 {
   programs = {
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      enableGlobalCompInit = false; # compinit lo fa già .zshrc, una volta sola e in cache
+    };
     fzf.keybindings = true;
   };
 
