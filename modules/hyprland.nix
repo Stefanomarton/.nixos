@@ -80,6 +80,7 @@ in
     # Appunti, screenshot, input
     cliphist
     wl-clipboard
+    wl-clip-persist
     slurp
     grim
     wtype
@@ -93,5 +94,9 @@ in
     # File e immagini
     nemo
     imv
+    udiskie
+
+    # Portachiavi (gnome-keyring): cambiare la password del portachiavi
+    seahorse
   ];
 }
