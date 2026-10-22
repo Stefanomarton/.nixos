@@ -14,6 +14,7 @@ in
     enable = true;
     silent = true;
     nix-direnv.enable = true;
+    settings.global.hide_env_diff = true;
   };
 
   # cpm installs claude-<profile> wrappers into ~/.local/bin
@@ -31,6 +32,7 @@ in
       lazygit
       gh
       delta
+      git-lfs
 
       # Build
       gnumake

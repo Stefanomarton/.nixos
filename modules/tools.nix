@@ -44,6 +44,9 @@
     ]
     ++ (with unstable; [
       yazi
+      _7zz # estrazione e compressione in yazi
+      mediainfo
+      exiftool
       btop-rocm
     ]);
 }

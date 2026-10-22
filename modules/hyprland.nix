@@ -76,8 +76,6 @@ in
     quickshell
     hyprpaper
     hyprsunset
-    gammastep
-    wallust
     polkit_gnome
     libnotify
 
