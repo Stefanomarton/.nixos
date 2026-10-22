@@ -1,4 +1,4 @@
-# Disco del tm-laptop (disko): partizione EFI + LUKS2 "cryptroot" con ext4.
+# Disco del tm-laptop (disko): partizione EFI + LUKS2 "cryptroot" con btrfs (subvolume @, @home, @nix come sul desktop).
 # disko lo usa per partizionare all'installazione e genera fileSystems e boot.initrd.luks.
 # Verificare il disco con `lsblk` prima di installare: tutto il contenuto viene cancellato.
 {
@@ -26,9 +26,22 @@
             settings.allowDiscards = true;
             # Nessun passwordFile: la passphrase la chiede disko durante la formattazione
             content = {
-              type = "filesystem";
-              format = "ext4";
-              mountpoint = "/";
+              type = "btrfs";
+              extraArgs = [ "-f" ];
+              subvolumes = {
+                "@" = {
+                  mountpoint = "/";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+                "@home" = {
+                  mountpoint = "/home";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                };
+              };
             };
           };
         };

@@ -52,7 +52,7 @@ Tutto è in [`hosts/tm-laptop/`](hosts/tm-laptop/): `default.nix` per la configu
 
 | Requisito | Come |
 |-----------|------|
-| Cifratura del disco | LUKS2 su tutto il sistema (`cryptroot`, ext4); fuori resta solo la partizione EFI. Layout dichiarato con [disko](https://github.com/nix-community/disko) |
+| Cifratura del disco | LUKS2 su tutto il sistema (`cryptroot`, btrfs con subvolume `@`, `@home`, `@nix`); fuori resta solo la partizione EFI. Layout dichiarato con [disko](https://github.com/nix-community/disko) |
 | Sblocco | TPM2 legato al PCR 7 (stato del Secure Boot): la chiave esce dal TPM solo se si avvia questo NixOS firmato. Restano la passphrase e una recovery key |
 | Avvio verificato | Secure Boot con chiavi proprie tramite [lanzaboote](https://github.com/nix-community/lanzaboote): kernel e initrd firmati, i sistemi non firmati (chiavette, altri OS) non partono |
 | VPN | OpenVPN (`openvpn-tm.service`), si accende a mano. Il profilo `.ovpn` sta in `/etc/openvpn/tm.ovpn` (root, 600) e non è nel repository |
