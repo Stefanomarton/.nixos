@@ -38,6 +38,11 @@
       url = "git+https://github.com/Stefanomarton/tasks?ref=feat/v0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # hard fork di agent-deck (privato): pacchetto e modifiche nostre; shallow, la storia è grande
+    agent-deck = {
+      url = "git+https://github.com/Stefanomarton/agent-deck?ref=main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     reshiki = {
       url = "github:Ameyanagi/ReShiki";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

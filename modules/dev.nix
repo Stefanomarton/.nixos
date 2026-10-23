@@ -12,6 +12,7 @@ let
   system = pkgs.stdenv.hostPlatform.system;
 
   home = "/home/${username}";
+  agentDeck = inputs.agent-deck.packages.${system}.default;
 in
 {
   programs.direnv = {
@@ -71,41 +72,30 @@ in
       taplo
       shfmt
     ]
-    ++ [ unstable.herdr ];
+    ++ [
+      unstable.herdr
+      agentDeck
+    ];
 
-  # agent-deck: web UI sempre attiva (http://127.0.0.1:8420), workspace "agents" con Super+Del.
+  # agent-deck (hard fork, ~/.marton-drive/work/projects/agent-deck): web UI sempre attiva
+  # (http://127.0.0.1:8420), workspace "agents" con Super+Del. Si aggiorna con `nix flake update agent-deck`.
   # KillMode=process: un restart non uccide il server tmux con le sessioni Claude dentro.
   systemd.user.services.agent-deck-web = {
     description = "agent-deck: web UI headless";
     wantedBy = [ "default.target" ];
-    # il binario sta in ~/.local/bin (si aggiorna da solo): senza, il servizio non parte
-    unitConfig.ConditionPathExists = "${home}/.local/bin/agent-deck";
     # le sessioni lanciate dal servizio cercano claude, tmux, git nel PATH di sistema
     environment.PATH = lib.mkForce "${home}/.local/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin";
     serviceConfig = {
-      ExecStart = "${home}/.local/bin/agent-deck web --no-tui --listen 127.0.0.1:8420";
+      ExecStart = "${agentDeck}/bin/agent-deck web --no-tui --listen 127.0.0.1:8420";
       KillMode = "process";
       Restart = "on-failure";
       RestartSec = 5;
     };
   };
 
-  # Aggiornamento giornaliero (lo stesso timer che agent-deck crea con update --install-timer)
-  systemd.user.services.agent-deck-autoupdate = {
-    description = "agent-deck: aggiornamento automatico";
-    unitConfig.ConditionPathExists = "${home}/.local/bin/agent-deck";
-    environment.AGENTDECK_UPDATE_TRIGGER = "timer";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${home}/.local/bin/agent-deck update --unattended --trigger timer";
-    };
-  };
-  systemd.user.timers.agent-deck-autoupdate = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "daily";
-      RandomizedDelaySec = "1h";
-      Persistent = true;
-    };
-  };
+  # Percorso stabile per gli hook di Claude (settings.json sincronizzato da cpm): agent-deck vi fissa
+  # ~/.local/bin/agent-deck se porta allo stesso binario, così gli hook non cambiano a ogni aggiornamento.
+  systemd.user.tmpfiles.users.${username}.rules = [
+    "L+ %h/.local/bin/agent-deck - - - - /run/current-system/sw/bin/agent-deck"
+  ];
 }

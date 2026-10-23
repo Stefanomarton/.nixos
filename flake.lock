@@ -1,5 +1,27 @@
 {
   "nodes": {
+    "agent-deck": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792782214,
+        "narHash": "sha256-/T0dSqx83m1nb3oHN3NXlLwV5QCn1CeWOkHQdudJiSU=",
+        "ref": "main",
+        "rev": "848e7b5ed2edf27f786cf109c2f2f70a762476af",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/agent-deck"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/agent-deck"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -854,6 +876,7 @@
     },
     "root": {
       "inputs": {
+        "agent-deck": "agent-deck",
         "claude-code": "claude-code",
         "cpm": "cpm",
         "disko": "disko",
