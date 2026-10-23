@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792782688,
-        "narHash": "sha256-hBSQoTJvdfbf5hXIRP+QBd83C7UyHw58izy8V4tItho=",
+        "lastModified": 1792783424,
+        "narHash": "sha256-/AXloOCZUXLhXwAl1rLr4kqbrsy7yku9ectZFtp1HWo=",
         "ref": "main",
-        "rev": "0ce1a011bafff7e42d29b12a1ef41e10aa93807e",
-        "revCount": 1,
+        "rev": "4831e579d94b2a20c0a4cc5f7af9b4f800425e16",
+        "revCount": 2,
         "type": "git",
         "url": "https://github.com/Stefanomarton/agent-deck-mcp"
       },

@@ -10,12 +10,13 @@ let
   home = "/home/${username}";
 in
 {
-  # MCP di agent-deck per claude.ai (agentdeck.marton.dev → tunnel → :8095): ogni scrittura alle
+  # MCP di agent-deck per claude.ai (agentdeck.marton.dev → tunnel desktop-agentdeck → 127.0.0.1:8095): ogni scrittura alle
   # sessioni va confermata sul telefono via ntfy. Segreti in ~/.config/{ntfy,agent-deck-mcp}/*.env.
   imports = [ inputs.agent-deck-mcp.nixosModules.default ];
   services.agent-deck-mcp = {
     enable = true;
-    allowFrom = [ "192.168.1.7" ]; # cloudflared-ste
+    # tunnel Cloudflare suo (desktop-agentdeck): cloudflared esce, nessuna porta aperta; token in tunnel.env
+    tunnel = true;
     path = "${home}/.local/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin";
   };
 
