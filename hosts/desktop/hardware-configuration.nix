@@ -57,19 +57,19 @@ boot.kernelParams = [
   boot.consoleLogLevel = 0;
 
   fileSystems."/" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/6d275a25-5585-4aeb-84f6-49a6bff9d0ae";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/6d275a25-5585-4aeb-84f6-49a6bff9d0ae";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/6d275a25-5585-4aeb-84f6-49a6bff9d0ae";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
