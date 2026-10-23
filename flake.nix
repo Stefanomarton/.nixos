@@ -43,6 +43,11 @@
       url = "git+https://github.com/Stefanomarton/agent-deck?ref=main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    # MCP per claude.ai sulle sessioni agent-deck (privato), solo desktop
+    agent-deck-mcp = {
+      url = "git+https://github.com/Stefanomarton/agent-deck-mcp?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     reshiki = {
       url = "github:Ameyanagi/ReShiki";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

@@ -22,6 +22,27 @@
         "url": "https://github.com/Stefanomarton/agent-deck"
       }
     },
+    "agent-deck-mcp": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792782688,
+        "narHash": "sha256-hBSQoTJvdfbf5hXIRP+QBd83C7UyHw58izy8V4tItho=",
+        "ref": "main",
+        "rev": "0ce1a011bafff7e42d29b12a1ef41e10aa93807e",
+        "revCount": 1,
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/agent-deck-mcp"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/Stefanomarton/agent-deck-mcp"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -877,6 +898,7 @@
     "root": {
       "inputs": {
         "agent-deck": "agent-deck",
+        "agent-deck-mcp": "agent-deck-mcp",
         "claude-code": "claude-code",
         "cpm": "cpm",
         "disko": "disko",
