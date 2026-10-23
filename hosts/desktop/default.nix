@@ -56,8 +56,6 @@
     enable = true;
   };
 
-  services.open-webui.enable = true;
-
   services.sunshine = {
     enable = true;
     autoStart = true;
