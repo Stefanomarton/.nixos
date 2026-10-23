@@ -15,7 +15,12 @@
       julia-mono
       lexend
     ]
-    ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+    # solo quelle usate (kitty, widget quickshell, icone): tutte erano 7,7 GiB
+    ++ (with pkgs.nerd-fonts; [
+      jetbrains-mono
+      geist-mono
+      symbols-only
+    ]);
 
   home-manager.users.${username} =
     { config, ... }:
