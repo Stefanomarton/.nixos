@@ -47,6 +47,5 @@ in
       tinymist
       pandoc
       wordcraft # testi; export PDF con wordcraft-cli convert
-      libreoffice # fogli di calcolo e conversioni headless (soffice) delle skill di Claude
     ]);
 }
