@@ -25,7 +25,7 @@
   nix = {
     gc = {
       automatic = true;
-      dates = "weekly";
+      dates = "daily"; # settimanale non teneva il passo (44 GiB di path morti)
       options = "--delete-older-than 7d";
     };
 
@@ -36,6 +36,10 @@
         "flakes"
       ];
       use-xdg-base-directories = true;
+
+      # Durante le build, sotto 10 GiB liberi raccoglie fino ad averne 50
+      min-free = 10 * 1024 * 1024 * 1024;
+      max-free = 50 * 1024 * 1024 * 1024;
 
       # Fix the "download buffer is full" warning (sets it to 128MB)
       download-buffer-size = 134217728;
