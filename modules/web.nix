@@ -16,7 +16,7 @@ in
   programs.chromium.enable = true;
 
   # Bitwarden fuori dal browser: rbw-agent tiene il vault sbloccato in memoria,
-  # Super+P cerca e scrive le credenziali (rofi-rbw su fuzzel), e fa da agente SSH
+  # Super+P cerca e scrive le credenziali (rofi-rbw su rofi, tema nei dotfiles), e fa da agente SSH
   # al posto di gcr-ssh-agent. Al login ~/.local/bin/secrets-sync (dotfiles, autostart.lua di
   # Hyprland) fa il login con 2FA e scrive in RAM le chiavi API tenute nel vault.
   services.gnome.gcr-ssh-agent.enable = false;
@@ -24,25 +24,12 @@ in
   # percorso intero: in PAM $XDG_RUNTIME_DIR potrebbe non essere ancora definita
   environment.sessionVariables.SSH_AUTH_SOCK = "/run/user/${uid}/rbw/ssh-agent-socket";
 
-  home-manager.users.${username}.programs = {
-    rbw = {
-      enable = true;
-      package = unstable.rbw; # agente SSH dalla 1.14
-      settings = {
-        email = "sstefanomarton@gmail.com"; # server ufficiale (USA), il predefinito di rbw
-        pinentry = pkgs.pinentry-gnome3;
-      };
-    };
-    # solo per rofi-rbw (tofi non è supportato); colori e font da stylix (theme.nix)
-    fuzzel = {
-      enable = true;
-      settings = {
-        main = {
-          width = 50;
-          lines = 12;
-        };
-        border.width = 2;
-      };
+  home-manager.users.${username}.programs.rbw = {
+    enable = true;
+    package = unstable.rbw; # agente SSH dalla 1.14
+    settings = {
+      email = "sstefanomarton@gmail.com"; # server ufficiale (USA), il predefinito di rbw
+      pinentry = pkgs.pinentry-gnome3;
     };
   };
 
@@ -72,6 +59,7 @@ in
     teams-for-linux
     bitwarden-desktop
     rofi-rbw-wayland
+    rofi # selettore di rofi-rbw: fuzzel 1.14 non ha più --override per le sue scorciatoie
     ferdium
   ]);
 }
