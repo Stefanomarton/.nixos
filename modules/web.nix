@@ -17,7 +17,8 @@ in
 
   # Bitwarden fuori dal browser: rbw-agent tiene il vault sbloccato in memoria,
   # Super+P cerca e scrive le credenziali (rofi-rbw su fuzzel), e fa da agente SSH
-  # al posto di gcr-ssh-agent. rbw-agent parte da autostart.lua di Hyprland.
+  # al posto di gcr-ssh-agent. Al login ~/.local/bin/secrets-sync (dotfiles, autostart.lua di
+  # Hyprland) fa il login con 2FA e scrive in RAM le chiavi API tenute nel vault.
   services.gnome.gcr-ssh-agent.enable = false;
   services.dbus.packages = [ pkgs.gcr ]; # pinentry-gnome3 fuori da GNOME
   # percorso intero: in PAM $XDG_RUNTIME_DIR potrebbe non essere ancora definita
