@@ -6,12 +6,13 @@ let
   repos = "${home}/.nixos ${home}/.dotfiles ${home}/.dotfiles/.config/emacs";
   deps = with pkgs; [ git gh libnotify util-linux systemd coreutils ];
 
-  # post-commit: pubblica il branch in background; se il push fallisce avvisa (dettagli in .git/autopush.log).
+  # post-commit e post-merge: pubblica il branch in background; se il push fallisce avvisa (dettagli in .git/autopush.log).
   autopush = pkgs.writeShellApplication {
     name = "autopush";
     runtimeInputs = deps;
     text = ''
       git symbolic-ref -q HEAD >/dev/null || exit 0
+      git rev-parse -q --verify '@{u}' >/dev/null || exit 0 # branch senza upstream (worktree): niente da pubblicare
       if [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]; then exit 0; fi
       repo=$(basename "$(git rev-parse --show-toplevel)")
       log=$(git rev-parse --git-path autopush.log)
@@ -32,7 +33,9 @@ let
       export GIT_TERMINAL_PROMPT=0
       for r in ${repos}; do
         git -C "$r" rev-parse --git-dir >/dev/null 2>&1 || continue
-        ln -sf ${autopush}/bin/autopush "$(git -C "$r" rev-parse --path-format=absolute --git-path hooks)/post-commit"
+        hooks=$(git -C "$r" rev-parse --path-format=absolute --git-path hooks)
+        ln -sf ${autopush}/bin/autopush "$hooks/post-commit"
+        ln -sf ${autopush}/bin/autopush "$hooks/post-merge" # i merge non passano da post-commit
       done
 
       for _ in $(seq 30); do
