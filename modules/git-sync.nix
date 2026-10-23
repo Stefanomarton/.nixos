@@ -48,7 +48,7 @@ let
         name=$(basename "$r")
         if ! out=$(git -C "$r" pull --ff-only --quiet 2>&1); then
           notify-send -u critical "git-sync: pull fallito in $name" "$out" || true
-        elif [ -n "$(git -C "$r" status --porcelain)" ]; then
+        elif [ -n "$(git -C "$r" status --porcelain --ignore-submodules=all)" ]; then
           notify-send "git-sync: $name" "modifiche non committate lasciate dall'ultima sessione" || true
         fi
       done
@@ -68,7 +68,7 @@ let
         for r in ${repos}; do
           git -C "$r" rev-parse --git-dir >/dev/null 2>&1 || continue
           name=$(basename "$r")
-          n=$(git -C "$r" status --porcelain | wc -l)
+          n=$(git -C "$r" status --porcelain --ignore-submodules=all | wc -l) # emacs è controllato a parte: il puntatore del submodule non conta
           a=$(git -C "$r" rev-list --count '@{u}..' 2>/dev/null || echo 0)
           if [ "$n" -gt 0 ]; then why+="$name: $n file non committati. "; fi
           if [ "$a" -gt 0 ]; then why+="$name: $a commit non pushati. "; fi
