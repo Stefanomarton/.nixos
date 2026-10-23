@@ -1,6 +1,7 @@
 # User-level timers for scripts that live in ~/.marton-drive (desktop only).
 {
   inputs,
+  lib,
   pkgs,
   username,
   ...
@@ -13,6 +14,15 @@ in
   # MCP di agent-deck per claude.ai (agentdeck.marton.dev → tunnel desktop-agentdeck → 127.0.0.1:8095): ogni scrittura alle
   # sessioni va confermata sul telefono via ntfy. Segreti in ~/.config/{ntfy,agent-deck-mcp}/*.env.
   imports = [ inputs.agent-deck-mcp.nixosModules.default ];
+
+  # agent-deck web anche via NetBird per l'app Android: ascolta ovunque ma la 8420 è aperta solo su
+  # nb-wt0 (dalla LAN resta chiusa); col token (file locale, 600) e l'Host NetBird dichiarato.
+  # Super+Del apre la UI col token letto dallo stesso file (menu.lua nei dotfiles).
+  systemd.user.services.agent-deck-web.serviceConfig.ExecStart = lib.mkForce (
+    "${lib.getExe inputs.agent-deck.packages.${pkgs.stdenv.hostPlatform.system}.default} web --no-tui"
+    + " --listen 0.0.0.0:8420 --token-file %h/.config/agent-deck/web-token --allowed-host 100.124.206.219:8420"
+  );
+  networking.firewall.interfaces.nb-wt0.allowedTCPPorts = [ 8420 ];
   services.agent-deck-mcp = {
     enable = true;
     # tunnel Cloudflare suo (desktop-agentdeck): cloudflared esce, nessuna porta aperta; token in tunnel.env
