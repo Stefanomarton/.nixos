@@ -55,6 +55,12 @@ in
     gnome.gnome-keyring.enable = true;
   };
 
+  # Hyprland non esegue l'autostart XDG: blueman e hyprsunset dalle unit dei pacchetti,
+  # legate alla sessione e riavviate se cadono (hyprsunset abortisce quando Hyprland esce)
+  systemd.packages = [ pkgs.hyprsunset ]; # la sua unit, a cui wantedBy aggiunge solo il collegamento
+  systemd.user.services.blueman-applet.wantedBy = [ "graphical-session.target" ];
+  systemd.user.services.hyprsunset.wantedBy = [ "graphical-session.target" ];
+
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
     wantedBy = [ "graphical-session.target" ];
