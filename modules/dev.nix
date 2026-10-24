@@ -93,6 +93,20 @@ in
     };
   };
 
+  # Dopo un riavvio: riparte le sessioni morte con lo spegnimento (agent-deck fleet recover), una alla volta
+  # e verificandole; le Claude riprendono la loro conversazione (--resume). Quelle fermate a mano restano ferme.
+  systemd.user.services.agent-deck-recover = {
+    description = "agent-deck: riavvia le sessioni interrotte dallo spegnimento";
+    wantedBy = [ "default.target" ];
+    after = [ "agent-deck-web.service" ];
+    environment.PATH = lib.mkForce "${home}/.local/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 15"; # rete e servizi su, prima di far ripartire Claude
+      ExecStart = "${agentDeck}/bin/agent-deck fleet recover --yes --spacing 8s";
+    };
+  };
+
   # Percorso stabile per gli hook di Claude (settings.json sincronizzato da cpm): agent-deck vi fissa
   # ~/.local/bin/agent-deck se porta allo stesso binario, così gli hook non cambiano a ogni aggiornamento.
   systemd.user.tmpfiles.users.${username}.rules = [
