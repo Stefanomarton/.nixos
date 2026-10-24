@@ -20,7 +20,7 @@ in
   # al posto di gcr-ssh-agent. Al login ~/.local/bin/secrets-sync (dotfiles, autostart.lua di
   # Hyprland) fa il login con 2FA e scrive in RAM le chiavi API tenute nel vault.
   services.gnome.gcr-ssh-agent.enable = false;
-  services.dbus.packages = [ pkgs.gcr ]; # pinentry-gnome3 fuori da GNOME
+  services.dbus.packages = [ pkgs.gcr ]; # prompt del portachiavi GNOME fuori da GNOME
   # percorso intero: in PAM $XDG_RUNTIME_DIR potrebbe non essere ancora definita
   environment.sessionVariables.SSH_AUTH_SOCK = "/run/user/${uid}/rbw/ssh-agent-socket";
 
@@ -29,7 +29,11 @@ in
     package = unstable.rbw; # agente SSH dalla 1.14
     settings = {
       email = "sstefanomarton@gmail.com"; # server ufficiale (USA), il predefinito di rbw
-      pinentry = pkgs.pinentry-gnome3;
+      # rofi col tema dei dotfiles, come Super+P; rbw vuole un eseguibile, gli argomenti stanno nel wrapper
+      pinentry = pkgs.writeShellScriptBin "pinentry-rbw" ''
+        exec ${pkgs.pinentry-rofi}/bin/pinentry-rofi "$@" -- -theme-str \
+          'window { width: 30%; } mainbox { children: [ inputbar, message ]; } entry { placeholder: ""; }'
+      '';
     };
   };
 
