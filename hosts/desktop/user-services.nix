@@ -27,6 +27,9 @@ in
     enable = true;
     # tunnel Cloudflare suo (desktop-agentdeck): cloudflared esce, nessuna porta aperta; token in tunnel.env
     tunnel = true;
+    # solo conferme firmate dall'app agent-deck (Pixel 8 associato con `agent-deck-mcp associa`): i pulsanti
+    # ntfy non valgono più e senza telefono associato nessuna scrittura parte
+    signedOnly = true;
     path = "${home}/.local/bin:/etc/profiles/per-user/${username}/bin:/run/current-system/sw/bin";
   };
 
