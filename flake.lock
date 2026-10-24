@@ -7,10 +7,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1792840127,
-        "narHash": "sha256-18/6MU3qBFqDrLus5JcCscWMXSUtR61tXWZQ/S4I//o=",
+        "lastModified": 1792841875,
+        "narHash": "sha256-EMVz4poL2Wugw5QlSyHRDG+RyaU4hUQEzwoYX+DT2i8=",
         "ref": "main",
-        "rev": "6319be5c50a797a7a8f1e4cd667f6a7bbde5bac1",
+        "rev": "de31a82b281121ee72695cd28810c153f0594ef1",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/Stefanomarton/agent-deck"
